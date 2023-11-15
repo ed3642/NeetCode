@@ -1,4 +1,5 @@
 class Solution:
+    # O(n^2)
     def threeSum(self, nums: list[int]) -> list[list[int]]:
         nums.sort()
 
@@ -10,9 +11,7 @@ class Solution:
         while nums[a] <= 0 and a < b and b < c:
             while b < c:
                 pair_index = self.sortedTwoSum(nums, b, c, -nums[a])
-                #print(a, b, c)
                 if pair_index:
-                    #print(a, pair_index[0], pair_index[1])
                     triplets.append([nums[a], nums[pair_index[0]], nums[pair_index[1]]])
                     b = pair_index[0] + 1
                     c = pair_index[1] - 1
