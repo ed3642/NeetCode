@@ -1,47 +1,28 @@
 from collections import deque
 
 class Solution:
+    # trick was to calculate finish times
     def carFleet(self, target: int, position: list[int], speed: list[int]) -> int:
-        fleet_count = 0
-        cars = sorted(zip(position, speed))
+        def carTimeToTarget(pos, vel) -> float:
+            return (target - pos) / vel
+        
+        finish_times = [carTimeToTarget(position[i], speed[i]) for i in range(len(position))]
+        cars = sorted(zip(position, finish_times))
 
-        def carFinalPos(car: tuple[int, int]):
-            return car[0] + car[1] # pos + vel * 1 unit time
+        stack = deque([cars.pop()])
+        
+        for car in cars[::-1]:
+            top_car = stack[-1]
+            if not car[1] <= top_car[1]: # car and top_car DO NOT become a fleet
+                stack.append(car)
 
-        def move(cars: list[tuple[int, int]]) -> deque:
-            nonlocal fleet_count
-            stack = deque()
-
-            for i in range(len(cars) - 1, -1, -1):
-                car = cars[i]
-                curr_final_pos = carFinalPos(car)
-                if curr_final_pos >= target:
-                    fleet_count += 1
-                    continue
-                curr_final_car = (curr_final_pos, car[1])
-                if curr_final_pos <= target and not stack:
-                    stack.append(curr_final_car)
-                elif stack:
-                    top_final_pos = stack[-1][0]
-                    if top_final_pos > curr_final_pos:
-                        stack.append(curr_final_car)
-            return stack
-
-        while cars:
-            stack = move(cars)
-            temp = []
-            print(stack)
-            while stack:
-                temp.append(stack.pop())
-            cars = temp
-
-        return fleet_count
+        return len(stack)
 
 
 s = Solution()
 
-target = 12
-pos = [10,8,0,5,3]
-vel = [2,4,1,1,3]
+target = 16
+pos = [6,11,13,14]
+vel = [7,2,6,2]
 
 print(s.carFleet(target, pos, vel))
