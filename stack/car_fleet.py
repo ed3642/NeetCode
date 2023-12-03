@@ -17,6 +17,20 @@ class Solution:
                 stack.append(car)
 
         return len(stack)
+    
+    def carFleet2(self, target: int, position: list[int], speed: list[int]) -> int:
+        cars = list(zip(position, speed))
+        cars.sort()
+        finish_times = [(target - car[0]) / car[1] for car in cars]
+        
+        stack = deque([finish_times[-1]])
+
+        for i in range(len(finish_times) - 1, -1, -1):
+            time = finish_times[i]
+            if time > stack[-1]:
+                stack.append(time)
+
+        return len(stack)
 
 
 s = Solution()
