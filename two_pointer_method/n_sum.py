@@ -1,5 +1,5 @@
 class Solution:
-    # O(n * group_size)
+    # O(n ^ group_size)
     def nSum(self, nums: list[int], target: int, group_size: int) -> list[list[int]]:
         def findNsum(l, r, target, N, result, results):
             if r - l + 1 < N or N < 2 or target < nums[l] * N or target > nums[r] * N: # early termination
