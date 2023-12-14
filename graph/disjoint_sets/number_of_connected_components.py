@@ -29,3 +29,6 @@ class Solution:
             ds.union(v1, v2)
         
         return ds.group_count
+    
+s = Solution()
+print(s.countComponents(4, [[0,3],[1,2],[0,2]]))
