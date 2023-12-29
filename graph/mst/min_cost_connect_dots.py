@@ -55,6 +55,7 @@ class Solution:
             if not ds.connected(a, b):
                 ds.union(a, b)
                 min_connection_cost += edge_cost
+                edges_count += 1
         
         return min_connection_cost
     
@@ -87,6 +88,7 @@ class Solution:
             if not ds.connected(a, b):
                 ds.union(a, b)
                 min_connection_cost += edge_cost
+                edges_count += 1
         
         return min_connection_cost
 
