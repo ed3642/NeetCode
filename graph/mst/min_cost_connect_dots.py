@@ -1,9 +1,11 @@
 import heapq
 
-class UnionFind:
-    def __init__(self, size):
-        self.parent = [i for i in range(size)]
-        self.rank = [0 for _ in range(size)]
+# Kruskals
+
+class UnionFind():
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.rank = [0 for _ in range(n)]
 
     def find(self, x):
         if self.parent[x] != x:
@@ -13,6 +15,7 @@ class UnionFind:
     def union(self, a, b):
         root_a = self.find(a)
         root_b = self.find(b)
+
         if root_a != root_b:
             if self.rank[root_a] > self.rank[root_b]:
                 self.parent[root_b] = root_a
@@ -22,76 +25,75 @@ class UnionFind:
                 self.parent[root_b] = root_a
                 self.rank[root_a] += 1
     
-    def connected(self, a, b):
+    def areConnected(self, a, b):
         root_a = self.find(a)
         root_b = self.find(b)
         return root_a == root_b
 
-class Solution:
-    # no heap
+class Kruskals:
     def minCostConnectPoints(self, points: list[list[int]]) -> int:
-        def cost(p1, p2):
-            x1, y1 = p1
-            x2, y2 = p2
-            return abs(x1 - x2) + abs(y1 - y2)
+        
+        def calcCost(a, b):
+            x1, y1 = a
+            x2, y2 = b
+            return abs(x2 - x1) + abs(y2 - y1)
 
         n = len(points)
         ds = UnionFind(n)
+        edges = []
 
-        # generate edges
-        possible_edges = [] # cost, p1, p2
-        for i1 in range(n):
-            for i2 in range(i1 + 1, n):
-                possible_edges.append((cost(points[i1], points[i2]), i1, i2))
-        
-        possible_edges.sort(reverse=True)
+        for i in range(n):
+            for j in range(i + 1, n):
+                edges.append((calcCost(points[i], points[j]), i, j))
 
-        min_connection_cost = 0
-        max_edges = n - 1 # max edges in MST
+        heapq.heapify(edges)
+        max_edges = n - 1
         edges_count = 0
+        total_cost = 0
 
-        while edges_count < max_edges and possible_edges:
-            edge_cost, a, b = possible_edges.pop()
-            if not ds.connected(a, b):
-                ds.union(a, b)
-                min_connection_cost += edge_cost
+        while edges and edges_count < max_edges:
+            cost, p1, p2 = heapq.heappop(edges)
+
+            if not ds.areConnected(p1, p2):
+                ds.union(p1, p2)
+                total_cost += cost
                 edges_count += 1
         
-        return min_connection_cost
-    
-    # heap
-    # if you want list sorted, its better to build it with a heap then sort as array
-    # generally this is true in practice
-    def minCostConnectPoints2(self, points: list[list[int]]) -> int:
-        def cost(p1, p2):
-            x1, y1 = p1
-            x2, y2 = p2
-            return abs(x1 - x2) + abs(y1 - y2)
+        return total_cost
 
+# Prims
+
+class Prims:
+    def minCostConnectPoints(self, points: list[list[int]]) -> int:
+
+        def calcCost(a, b):
+            x1, y1 = a
+            x2, y2 = b
+            return abs(x2 - x1) + abs(y2 - y1)
+        
         n = len(points)
-        ds = UnionFind(n)
+        heap = []
+        visited = [False] * n
 
-        # generate edges
-        heap_edges = [] # cost, p1, p2
-        for i1 in range(n):
-            for i2 in range(i1 + 1, n):
-                heap_edges.append((cost(points[i1], points[i2]), i1, i2))
-        
-        heapq.heapify(heap_edges)
-        
-        min_connection_cost = 0
-        max_edges = n - 1 # max edges in MST
+        # edges from points[0]
+        for i in range(1, n):
+            heap.append((calcCost(points[0], points[i]), 0, i))
+
+        heapq.heapify(heap)
+        visited[0] = True
+        max_edges = n - 1
         edges_count = 0
+        total_cost = 0
 
-        while edges_count < max_edges and heap_edges:
-            edge_cost, a, b = heapq.heappop(heap_edges)
-            if not ds.connected(a, b):
-                ds.union(a, b)
-                min_connection_cost += edge_cost
+        while heap and edges_count < max_edges:
+            cost, p1, p2 = heapq.heappop(heap)
+
+            if not visited[p2]:
+                visited[p2] = True
+                total_cost += cost
                 edges_count += 1
+                for i in range(1, n):
+                    if not visited[i]:
+                        heapq.heappush(heap, (calcCost(points[p2], points[i]), p2, i))
         
-        return min_connection_cost
-
-
-
-
+        return total_cost
