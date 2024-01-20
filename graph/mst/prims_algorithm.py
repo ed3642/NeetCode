@@ -33,7 +33,6 @@ class Solution:
                 total_cost += cost
                 visited[p2] = True
                 edges_count += 1
-                print(edges_count, p1, p2)
                 # generate all edges from p2 to all other non-visited points
                 for j in range(n):
                     if not visited[j]:
