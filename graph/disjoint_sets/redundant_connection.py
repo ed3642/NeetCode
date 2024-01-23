@@ -9,7 +9,6 @@ class UnionFind:
             self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
     
-    # return True when all nodes are connected
     def union(self, a, b):
         root_a = self.find(a)
         root_b = self.find(b)
