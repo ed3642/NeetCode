@@ -63,8 +63,9 @@ class Solution:
                 candidate_dist = dist + neighbor_dist
                 if candidate_dist < distances[neighbor_node]:
                     distances[neighbor_node] = candidate_dist
-                    queue.append((distances[neighbor_node], neighbor_node))
-                    in_queue[k] = True
+                    if not in_queue[neighbor_node]:
+                        queue.append((distances[neighbor_node], neighbor_node))
+                        in_queue[k] = True
         
         max_distance = max(distances)
         return max_distance if max_distance != float('inf') else -1
