@@ -1,4 +1,5 @@
 import heapq
+from collections import deque
 
 class Solution:
     # NOTE: nodes go from 1..n
@@ -35,3 +36,35 @@ class Solution:
         max_distance = max(distances)
         
         return -1 if max_distance == float('inf') else max_distance
+    
+    def networkDelayTime2(self, times: list[list[int]], n: int, k: int) -> int:
+        # SFPA with in_queue improvement
+
+        # make adjacency list
+        adj_list = [[] for _ in range(n + 1)]
+        for edge in times:
+            v_from, v_to, distance = edge
+            adj_list[v_from].append((distance, v_to))
+
+        queue = deque([(0, k)])
+        distances = [float('inf')] * (n + 1)
+        distances[k] = 0
+        distances[0] = 0 # does not exist in problem
+        in_queue = [False] * (n + 1)
+        in_queue[k] = True
+
+        while queue:
+            dist, node = queue.popleft()
+            in_queue[node] = False
+
+            for neighbor in adj_list[node]:
+                neighbor_dist, neighbor_node = neighbor
+
+                candidate_dist = dist + neighbor_dist
+                if candidate_dist < distances[neighbor_node]:
+                    distances[neighbor_node] = candidate_dist
+                    queue.append((distances[neighbor_node], neighbor_node))
+                    in_queue[k] = True
+        
+        max_distance = max(distances)
+        return max_distance if max_distance != float('inf') else -1

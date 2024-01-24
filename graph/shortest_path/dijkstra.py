@@ -2,6 +2,7 @@ import heapq
 
 class Solution:
     # returns the distance and previous node link that forms the shortest path
+    # O((V + E)logV) time complexity, where E is the number of edges and V is the number of vertices
     def dijkstra(self, edges: list[list[int]], n: int, source_node: int) -> int:
 
         # make adjacency list
@@ -18,6 +19,8 @@ class Solution:
         heap = [(0, source_node)]
         distances[source_node] = 0
 
+        # greedy explore that looks at each neighbor and updates the shortest distance
+        # if its shortest than the previous tentative shortest distance to that node
         while heap:
             dist, node = heapq.heappop(heap)
             visited[node] = True
