@@ -31,3 +31,34 @@ class Solution:
         right_side_results = binarySearch(pivot_index, n - 1)
 
         return left_side_results if left_side_results != -1 else right_side_results
+
+    # more intuitive for me
+    def search2(self, nums: list[int], target: int) -> int:
+        def binary_search(nums):
+            l = 0
+            r = len(nums) - 1
+            while l <= r:
+                m = (l + r) // 2
+                if nums[m] < target:
+                    l = m + 1
+                elif nums[m] > target:
+                    r = m - 1
+                else:
+                    return m
+            return -1
+        
+        # find min in rotated array
+        l = 0
+        r = len(nums) - 1
+        while r - l > 1:
+            m = (l + r) // 2
+            if nums[m] > nums[r]:
+                l = m
+            else:
+                r = m
+        minimum = l if nums[l] < nums[r] else r
+
+        left_side = binary_search(nums[:minimum])
+        right_side = binary_search(nums[minimum:])
+
+        return left_side if right_side == -1 else right_side + len(nums[:minimum])
