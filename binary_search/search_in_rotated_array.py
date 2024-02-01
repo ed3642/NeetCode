@@ -32,7 +32,6 @@ class Solution:
 
         return left_side_results if left_side_results != -1 else right_side_results
 
-    # more intuitive for me
     def search2(self, nums: list[int], target: int) -> int:
         def binary_search(nums):
             l = 0
@@ -62,3 +61,33 @@ class Solution:
         right_side = binary_search(nums[minimum:])
 
         return left_side if right_side == -1 else right_side + len(nums[:minimum])
+    
+    def search3(self, nums: list[int], target: int) -> int:
+        def binary_search(nums):
+            l = 0
+            r = len(nums) - 1
+            while l <= r:
+                m = (l + r) // 2
+                if nums[m] < target:
+                    l = m + 1
+                elif nums[m] > target:
+                    r = m - 1
+                else:
+                    return m
+            return -1
+        
+        # find min in rotated array
+        l = 0
+        r = len(nums) - 1
+        while l < r:
+            m = (l + r) // 2
+            if nums[m] > nums[r]:
+                l = m + 1
+            else:
+                r = m
+        minimum_i = l
+
+        left_side = binary_search(nums[:minimum_i])
+        right_side = binary_search(nums[minimum_i:])
+
+        return left_side if right_side == -1 else right_side + len(nums[:minimum_i])

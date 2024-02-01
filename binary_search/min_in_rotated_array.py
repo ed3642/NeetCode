@@ -13,7 +13,6 @@ class Solution:
         
         return nums[l - 1]
 
-    # i like this version more
     def findMin2(self, nums: list[int]) -> int:
         n = len(nums)
         l = 0
@@ -27,6 +26,20 @@ class Solution:
                 r = m
         
         return nums[l] if nums[l] < nums[r] else nums[r]
+    
+    # i like this version more
+    def findMin3(self, nums: list[int]) -> int:
+        l = 0
+        r = len(nums) - 1
+        while l < r:
+            m = (l + r) // 2
+            if nums[m] > nums[r]:
+                l = m + 1
+            else:
+                r = m
+        
+        return nums[l]
+        
 
 s = Solution()
 
