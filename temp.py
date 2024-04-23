@@ -1,31 +1,24 @@
 class Solution:
-    def numIslands(self, grid: list[list[str]]) -> int:
+    def deleteAndEarn(self, nums: list[int]) -> int:
+        # transform nums
+        _max = max(nums)
+        aggregate = [0] * (_max + 1) # index represents the number, v[i] is the total of that num
 
-        def isValid(i, j):
-            return (
-                i >= 0 and i < ROWS and
-                j >= 0 and j < COLS and
-                grid[i][j] == "1"
-            )
-        
-        def explore(i, j):
-            for d_i, d_j in directions:
-                n_i = i + d_i
-                n_j = j + d_j
-                if isValid(n_i, n_j):
-                    grid[n_i][n_j] = "0" # mark as visited
-                    explore(n_i, n_j)
-        
-        ROWS = len(grid)
-        COLS = len(grid[0])
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        num_islands = 0
+        for num in nums:
+            aggregate[num] += num
 
-        for i in range(ROWS):
-            for j in range(COLS):
-                if grid[i][j] == "1":
-                    num_islands += 1
-                    explore(i, j)
+        # dp section
+        n = len(aggregate)
+        if n == 1:
+            return aggregate[0]
+        elif n == 2:
+            return max(aggregate[0], aggregate[1])
         
-        return num_islands
+        dp = [0] * n
+        dp[0] = aggregate[0]
+        dp[1] = max(aggregate[0], aggregate[1])
 
+        for i in range(2, n):
+            dp[i] = max(dp[i - 1], aggregate[i] + dp[i - 2])
+
+        return max(dp[-1], dp[-2])

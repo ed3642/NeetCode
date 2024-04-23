@@ -26,22 +26,25 @@ class Solution:
     
     # O (n)
     def deleteAndEarn(self, nums: list[int]) -> int:
-        max_num = max(nums)
-        frequencies = [0] * (max_num + 1)
+        # transform nums
+        _max = max(nums)
+        aggregate = [0] * (_max + 1) # index represents the number, v[i] is the total of that num
 
         for num in nums:
-            frequencies[num] += 1
-        
-        options = [0] * (max_num + 1)
-        for i, freq in enumerate(frequencies):
-            options[i] = i * freq
+            aggregate[num] += num
 
-        n = len(options)
+        # dp section
+        n = len(aggregate)
+        if n == 1:
+            return aggregate[0]
+        elif n == 2:
+            return max(aggregate[0], aggregate[1])
+        
         dp = [0] * n
-        dp[0] = options[0]
-        dp[1] = max(options[0], options[1])
+        dp[0] = aggregate[0]
+        dp[1] = max(aggregate[0], aggregate[1])
 
         for i in range(2, n):
-            dp[i] = max(dp[i - 2] + options[i], dp[i - 1])
-        
-        return dp[n - 1]
+            dp[i] = max(dp[i - 1], aggregate[i] + dp[i - 2])
+
+        return max(dp[-1], dp[-2])

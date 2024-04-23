@@ -1,5 +1,5 @@
 class Solution:
-    # O(n^2), there is a way to do it with also in O(n^2) but slightly better palindrome checking with dp
+    # O(n^2), there is a way to do it with also in O(n^2) but slightly better palindrome checking with 2d dp
     def longestPalindrome(self, s: str) -> str:
 
         def expand(isEvenLenght=False):
@@ -29,5 +29,5 @@ class Solution:
     # O(n^2) dp
     def longestPalindrome(self, s: str) -> str:
         n = len(s)
-        dp = []
+        dp = [[]]
         ...

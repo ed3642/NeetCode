@@ -6,34 +6,29 @@ class Solution:
         # Prims
         # cities numbered 1..n
         heap = []
-        connetions_count = 0 # stop at n - 1
-        visited = [False] * (n + 1)
+        visited = set()
         total_cost = 0
-        edges = defaultdict(list)
-        starting_city = connections[0][0]
+        graph = defaultdict(list)
 
-        # choose arbitrary node and heapify its edges
-        for connection in connections:
-            _from, to, cost = connection
-            edges[_from].append((to, cost)) # for easy neighbor access later
-            edges[to].append((_from, cost))
-            if _from == starting_city or to == starting_city:
-                heap.append((cost, _from, to))
-        heapq.heapify(heap)
-
-        # pick the smallest edge and go to its "to" city, repeat
-        while heap and connetions_count < n - 1:
-            cost, _from, to = heapq.heappop(heap)
-            if visited[to]: continue
-            visited[_from] = True
-            total_cost += cost
-            connetions_count += 1
-
-            if not visited[to]:
-                visited[to] = True
-                for edge in edges[to]:
-                    edge_to, edge_cost = edge
-                    if not visited[edge_to]:
-                        heapq.heappush(heap, (edge_cost, to, edge_to))
+        # build adj list
+        for _from, to, cost in connections:
+            graph[_from].append((to, cost))
+            graph[to].append((_from, cost))
         
-        return total_cost if connetions_count == n - 1 else -1
+        heap = [(0, 1)] # city 1 with cost 0
+
+        # pick the smallest edge and go to its neighbor city, repeat
+        while heap and len(visited) < n:
+            cost, curr_node = heapq.heappop(heap)
+            if curr_node in visited:
+                continue
+            
+            # process city
+            visited.add(curr_node)
+            total_cost += cost
+
+            for neighbor_node, neighbor_cost in graph[curr_node]:
+                if neighbor_node not in visited:
+                    heapq.heappush(heap, (neighbor_cost, neighbor_node))
+            
+        return total_cost if len(visited) == n else -1
