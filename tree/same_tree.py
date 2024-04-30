@@ -20,3 +20,18 @@ class Solution:
             return dfs(root1.left, root2.left) and dfs(root1.right, root2.right)
         
         return dfs(p, q)
+    
+    def isSameTreeIterative(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        queue = deque([(p, q)])
+        
+        while queue:
+            p, q = queue.popleft()
+            if bool(p) ^ bool(q): 
+                return False
+            if not p and not q:
+                continue
+            if not p.val == q.val:
+                return False
+            queue.append((p.left, q.left))
+            queue.append((p.right, q.right))
+        return True

@@ -27,6 +27,7 @@ class Solution:
         backtrack([], res)
         return res
     
+    # the only difference bt comb and subsets is that we dont care about the size in subsets
     def combinations(self, nums: list[int], k: int) -> list[list[int]]:
         def backtrack(start, builder, res):
             if len(builder) == k:

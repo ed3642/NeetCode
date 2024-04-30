@@ -18,6 +18,25 @@ class Solution:
         backtrack('', 0, 0)
         return solutions
     
+    def generateParenthesis2(self, n: int) -> list[str]:
+        def backtrack(builder, lefts, rights):
+            if lefts == n and rights == n:
+                res.append(''.join(builder))
+                return
+            
+            if lefts < n:
+                builder.append('(')
+                backtrack(builder, lefts + 1, rights)
+                builder.pop()
+            if rights < n and rights < lefts:
+                builder.append(')')
+                backtrack(builder, lefts, rights + 1)
+                builder.pop()
+                
+        res = []
+        backtrack([], 0, 0)
+        return res
+
     # iterative solution
     # imitating recursion with a stack
     def generateParenthesis2(n):
