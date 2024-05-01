@@ -26,8 +26,34 @@ class Solution:
                     queue.append((prices[neighbor_node], stops + 1, neighbor_node))
         
         return prices[dst] if prices[dst] != float('inf') else -1
-
+    
     def findCheapestPrice2(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+        # SPFA
+
+        graph = [[] for _ in range(n)]
+        for _from, to, price in flights:
+            graph[_from].append((to, price))
+
+        queue = deque([(0, 0, src)]) # <price, num_stops, node>
+        #in_queue = set([src]) cant use inqueue in this problem, might miss solution
+        prices = [float('inf') for _ in range(n)]
+        prices[src] = 0
+
+        while queue:
+            price, num_stops, node = queue.popleft()
+
+            if num_stops > k: # these paths are too long
+                continue
+
+            for neighbor_node, neighbor_price in graph[node]:
+                candidate_price = price + neighbor_price
+                if candidate_price < prices[neighbor_node]:
+                    prices[neighbor_node] = candidate_price
+                    queue.append((candidate_price, num_stops + 1, neighbor_node))
+
+        return prices[dst] if prices[dst] != float('inf') else -1
+
+    def findCheapestPrice3(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
         # modified dijkstra
             
         adj_list = [[] for _ in range(n)]

@@ -38,7 +38,7 @@ class Solution:
         return -1 if max_distance == float('inf') else max_distance
     
     def networkDelayTime2(self, times: list[list[int]], n: int, k: int) -> int:
-        # SFPA with in_queue improvement
+        # SPFA with in_queue improvement
 
         # make adjacency list
         adj_list = [[] for _ in range(n + 1)]
