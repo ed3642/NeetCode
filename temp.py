@@ -1,29 +1,24 @@
-from collections import deque
+class DisjointSet:
 
-class Solution:
-    def findOrder(self, numCourses: int, prerequisites: list[list[int]]) -> list[int]:
-        
-        graph = [[] for _ in range(numCourses)]
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.rank = [0 for _ in range(n)]
+    
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
 
-        indegrees = [0 for _ in range(numCourses)]
-        for to, _from in prerequisites:
-            graph[_from].append(to)
-            indegrees[to] += 1
+    def union(self, a, b):
+        root_a = self.find(a)
+        root_b = self.find(b)
 
-        res = []
-        queue = deque()
-        for course in range(len(indegrees)):
-            if indegrees[course] == 0:
-                queue.append(course)
-                res.append(course)
-
-        while queue:
-            course = queue.popleft()
-
-            for neighbor_course in graph[course]:
-                indegrees[neighbor_course] -= 1
-                if indegrees[neighbor_course] == 0:
-                    queue.append(neighbor_course)
-                    res.append(neighbor_course)
-        
-        return res if len(res) == numCourses else []
+        if root_a != root_b:
+            if self.rank[root_a] < self.rank[root_b]:
+                self.parent[root_a] = root_b
+            elif self.rank[root_a] > self.rank[root_b]:
+                self.parent[root_b] = root_a
+            else:
+                self.parent[root_b] = root_a
+                self.rank[root_a] += 1
+ 
