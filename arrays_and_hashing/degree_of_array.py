@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 class Solution:
+    # O(n)
     def findShortestSubArray(self, nums: list[int]) -> int:
         freqs = defaultdict(int) # freq, len, first_left
 
