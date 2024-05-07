@@ -3,7 +3,7 @@ class Solution:
     def jump(self, nums: list[int]) -> int:
         # basically make the best jump
 
-        # worth of a position
+        # worth of a positio n
         def heuristic(i):
             return (nums[i] + i)
 

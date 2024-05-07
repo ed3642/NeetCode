@@ -1,11 +1,12 @@
 class Solution:
     # O(n^2), there is a way to do it with also in O(n^2) but slightly better palindrome checking with 2d dp
+    # O (1) space, DP method uses O(n^2) space
     def longestPalindrome(self, s: str) -> str:
 
-        def expand(isEvenLenght=False):
+        def expand(is_even_length=False):
             for i in range(n):
                 l = i
-                r = i if isEvenLenght else i + 1
+                r = i if is_even_length else i + 1
                 while l >= 0 and r < n:
                     length = r - l + 1
                     if s[l] == s[r] and length > self.max_len:
@@ -28,6 +29,23 @@ class Solution:
     
     # O(n^2) dp
     def longestPalindrome(self, s: str) -> str:
+        # start at endpoints and check if its pal with dp
+        # dp[i][j] = s[i] == s[j] and dp[i + 1][j - 1] or length < 2
+
         n = len(s)
-        dp = [[]]
-        ...
+        dp = [[False] * n for _ in range(n)] # True if dp[i][j] is pal
+        for i in range(n):
+            dp[i][i] = True
+        
+        longest = s[0]
+        # weird iteration order to guarantee that dp[i + 1][j - 1] is calculated before dp[i][j]
+        # for the i you need to be coming from the right (dependency [i + 1])
+        # for the j you need to be coming from the left (dependency [j - 1])
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 1, n):
+                length = j - i + 1
+                dp[i][j] = s[i] == s[j] and (dp[i + 1][j - 1] or length <= 2)
+                if dp[i][j] and length > len(longest):
+                    longest = s[i:j + 1]
+        
+        return longest
