@@ -18,7 +18,10 @@ class Fibonacci:
 
         return self.fib[self.n]
 
+from functools import lru_cache
+
 # Recursive solution
+@lru_cache(maxsize=None)
 def fib(n):
     if n == 1 or n == 2:
         return 1

@@ -30,7 +30,7 @@ class Solution:
     # O(n^2) dp
     def longestPalindrome(self, s: str) -> str:
         # start at endpoints and check if its pal with dp
-        # dp[i][j] = s[i] == s[j] and dp[i + 1][j - 1] or length < 2
+        # dp[i][j] = s[i] == s[j] and (dp[i + 1][j - 1] or length < 2)
 
         n = len(s)
         dp = [[False] * n for _ in range(n)] # True if dp[i][j] is pal
