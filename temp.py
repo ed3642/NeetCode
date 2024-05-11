@@ -1,19 +1,21 @@
 class Solution:
-    def reverseVowels(self, s: str) -> str:
-        # make a list of each vowel in a stack
+    def productExceptSelf(self, nums: list[int]) -> list[int]:
+        # [1,2,3,4]
+        # [1,2,6,24]
+        # [24,24,12,4]
 
-        vowels = []
-        vowels_set = set('aeiuoAEIOU')
+        # [24,12,8,6]
+        n = len(nums)
+        pre_cumulative = [1] * (n + 2)
+        post_cumulative = [1] * (n + 2)
 
-        for ch in s:
-            if ch in vowels_set:
-                vowels.append(ch)
+        for i in range(n):
+            pre_cumulative[i + 1] = nums[i] * pre_cumulative[i]
+        
+        for i in range(n - 1, -1, -1):
+            post_cumulative[i + 1] = nums[i] * post_cumulative[i + 2]
+        
+        for i in range(1, n + 2 - 1):
+            nums[i - 1] = pre_cumulative[i - 1] * post_cumulative[i + 1]
 
-        builder = []
-        for i, ch in enumerate(s):
-            if ch in vowels_set:
-                builder.append(vowels.pop())
-            else:
-                builder.append(s[i])
-
-        return ''.join(builder)
+        return nums
