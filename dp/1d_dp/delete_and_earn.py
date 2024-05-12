@@ -1,8 +1,26 @@
 from collections import Counter
 
 class Solution:
-    # O (nlogn)
+
+    # nice solution
     def deleteAndEarn(self, nums: list[int]) -> int:
+        max_nums = max(nums)
+        total_worth = [0 for _ in range(max_nums + 1)]
+        dp = [0] * len(total_worth)
+
+        for num in nums:
+            total_worth[num] += num
+
+        dp[0] = total_worth[0]
+        dp[1] = max(total_worth[0], total_worth[1])
+
+        for i in range(2, len(total_worth)):
+            dp[i] = max(dp[i - 1], dp[i - 2] + total_worth[i])
+
+        return dp[len(total_worth) - 1]
+
+    # O (nlogn)
+    def deleteAndEarn2(self, nums: list[int]) -> int:
         nums.sort()
         frequencies = Counter(nums)
 
@@ -25,7 +43,7 @@ class Solution:
         return dp[n - 1]
     
     # O (n)
-    def deleteAndEarn(self, nums: list[int]) -> int:
+    def deleteAndEarn3(self, nums: list[int]) -> int:
         # transform nums
         _max = max(nums)
         aggregate = [0] * (_max + 1) # index represents the number, v[i] is the total of that num

@@ -1,19 +1,19 @@
+from functools import lru_cache
+
 class Solution:
-    def dailyTemperatures(self, temperatures: list[int]) -> list[int]:
+    def deleteAndEarn(self, nums: list[int]) -> int:
         
-        stack = [] # mono dec stack from left
-        res = [0] * len(temperatures)
+        max_nums = max(nums)
+        total_worth = [0 for _ in range(max_nums + 1)]
+        dp = [0] * len(total_worth)
 
-        for i in range(len(temperatures) - 1, -1, -1):
-            temp = temperatures[i]
+        for num in nums:
+            total_worth[num] += num
 
-            while stack and temp >= temperatures[stack[-1]]:
-                stack.pop()
-            # record days until next warmer
-            if stack:
-                res[i] = stack[-1] - i
+        dp[0] = total_worth[0]
+        dp[1] = max(total_worth[0], total_worth[1])
 
-            stack.append(i)
+        for i in range(2, len(total_worth)):
+            dp[i] = max(dp[i - 1], dp[i - 2] + total_worth[i])
 
-        
-        return res
+        return dp[len(total_worth) - 1]
