@@ -10,18 +10,12 @@ class Solution:
     
     # dp bottom up
     def uniquePaths2(self, m: int, n: int) -> int:
-        dp = [[0] * n for _ in range(m)]
+        
+        dp = [[1] * n for _ in range(m)]
 
-        # set base cases
-        for i in range(m):
-            dp[i][0] = 1
-        for i in range(n):
-            dp[0][i] = 1
-
-        # dp
         for i in range(1, m):
             for j in range(1, n):
-                dp[i][j] = dp[i][j - 1] + dp[i - 1][j]
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
         
         return dp[m - 1][n - 1]
     

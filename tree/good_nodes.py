@@ -26,3 +26,19 @@ class Solution:
         
         dfs(root, root.val)
         return self.count
+    
+    def goodNodes2(self, root: TreeNode) -> int:
+        
+        def dfs(node, max_path_val):
+            if not node:
+                return
+            new_max = max_path_val
+            if max_path_val <= node.val:
+                new_max = node.val
+                self.count += 1
+            dfs(node.left, new_max)
+            dfs(node.right, new_max)
+        
+        self.count = 0
+        dfs(root, -float('inf'))
+        return self.count
