@@ -10,7 +10,6 @@ class Solution:
 
         while b < len(t):
             looking_for = s[a]
-            print(looking_for)
 
             while b < len(t) and t[b] != looking_for:
                 b += 1

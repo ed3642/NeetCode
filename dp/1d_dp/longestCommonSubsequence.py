@@ -17,7 +17,7 @@ class Solution:
                 else:
                     # case 2: one of the chars can be in the opt sol
                     dp[i][j] = max(dp[i + 1][j], dp[i][j + 1])
-        print(dp)
+
         return dp[0][0]
     
     # O (m n)
