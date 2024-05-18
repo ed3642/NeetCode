@@ -1,23 +1,35 @@
-from collections import deque
+# Definition for a binary tree node.
+from collections import defaultdict
+from typing import Optional
 
-class StockSpanner:
-    # mono dec stack in order of input
-    def __init__(self):
-        self.stack = deque([(float('inf'), -1)]) # act as a cap for day -1
-        self.current_day = 0
 
-    def next(self, price: int) -> int:
-        span = 1
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
-        while self.stack and self.stack[-1][0] <= price:
-            self.stack.pop()
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
         
-        span = self.current_day - self.stack[-1][1] # last day bigger than today
-        self.stack.append((price, self.current_day))
+        def dfs(node, total):
+            if not node:
+                return 0
+            
+            total += node.val
+            
+            need = total - targetSum
+            if need in prefix_sum:
+                self.count += prefix_sum[need]
 
-        self.current_day += 1
-        return span
+            prefix_sum[total] += 1
+            dfs(node.left, total)
+            dfs(node.right, total)
+            prefix_sum[total] -= 1
 
-# Your StockSpanner object will be instantiated and called as such:
-# obj = StockSpanner()
-# param_1 = obj.next(price)
+        prefix_sum = defaultdict(int)
+        prefix_sum[0] = 1
+        self.count = 0
+        dfs(root, 0)
+
+        return self.count

@@ -15,19 +15,26 @@ class Solution:
 
         def dfs(node, total):
             if not node:
-                return
+                return 0
             
             total += node.val
-            need = total - targetSum
-            self.count += prefix_sums[need]
             
-            prefix_sums[total] += 1
+            # path sum starts at the root
+            if total == targetSum:
+                self.count += 1
+            
+            # path sum starts somewhere in the middle
+            need = total - targetSum # some path in the tree whos sum is targetSum
+            if need in prefix_sum:
+                self.count += prefix_sum[need]
+
+            prefix_sum[total] += 1
             dfs(node.left, total)
             dfs(node.right, total)
-            prefix_sums[total] -= 1
+            prefix_sum[total] -= 1
 
-        prefix_sums = defaultdict(int) # <sum, freq>
-        prefix_sums[0] = 1 # root node to its self
+        prefix_sum = defaultdict(int) # <sum, freq>
+        prefix_sum[0] = 1 # root node to its self
         self.count = 0
         dfs(root, 0)
 
