@@ -1,35 +1,20 @@
-# Definition for a binary tree node.
-from collections import defaultdict
-from typing import Optional
-
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
+from functools import lru_cache
 
 class Solution:
-    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+    def minPathSum(self, grid: list[list[int]]) -> int:
         
-        def dfs(node, total):
-            if not node:
-                return 0
+        @lru_cache(maxsize=None)
+        def dp(i, j):
             
-            total += node.val
+            if i == 0 and j == 0:
+                return grid[0][0]
+            if i == 0:
+                return dp(0, j - 1) + grid[i][j]
+            if j == 0:
+                return dp(i - 1, 0) + grid[i][j]
             
-            need = total - targetSum
-            if need in prefix_sum:
-                self.count += prefix_sum[need]
+            return min(dp(i - 1, j), dp(i, j - 1)) + grid[i][j]
 
-            prefix_sum[total] += 1
-            dfs(node.left, total)
-            dfs(node.right, total)
-            prefix_sum[total] -= 1
-
-        prefix_sum = defaultdict(int)
-        prefix_sum[0] = 1
-        self.count = 0
-        dfs(root, 0)
-
-        return self.count
+        n = len(grid)
+        m = len(grid[0])
+        return dp(n - 1, m - 1)
