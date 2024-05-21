@@ -1,7 +1,35 @@
 class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        
+        def expand(i, reach=0, look_for_even=False):
+            nonlocal longest
+
+            l = i - reach
+            r = i + reach + (1 if look_for_even else 0) 
+            if l < 0 or r >= len(s):
+                return
+            
+            if s[l] == s[r]:
+                curr_max_len = longest[1] - longest[0] + 1
+                curr_len = r - l + 1
+                if curr_max_len < curr_len:
+                    longest = (l, r)
+                expand(i, reach + 1, look_for_even)
+            return
+
+        # start and end of longest
+        longest = (0, 0)
+        for i in range(len(s)):
+            expand(i, 0, False)
+            expand(i, 0, True)
+        
+        start = longest[0]
+        end = longest[1]
+        return s[start: end + 1]
+
     # O(n^2), there is a way to do it with also in O(n^2) but slightly better palindrome checking with 2d dp
     # O (1) space, DP method uses O(n^2) space
-    def longestPalindrome(self, s: str) -> str:
+    def longestPalindrome2(self, s: str) -> str:
 
         def expand(is_even_length=False):
             for i in range(n):
@@ -28,7 +56,7 @@ class Solution:
         return s[bounds[0]: bounds[1]]
     
     # O(n^2) dp
-    def longestPalindrome(self, s: str) -> str:
+    def longestPalindrome3(self, s: str) -> str:
         # start at endpoints and check if its pal with dp
         # dp[i][j] = s[i] == s[j] and (dp[i + 1][j - 1] or length < 2)
 
