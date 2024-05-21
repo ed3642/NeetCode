@@ -4,20 +4,21 @@ class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
         
         @lru_cache(maxsize=None)
-        def dp(len_str_1, len_str_2):
+        def dp(w1_i, w2_i):
             
-            if len_str_1 == 0:
-                return len_str_2
-            if len_str_2 == 0:
-                return len_str_1
+            # reaching the end of a word, remaining operations is how many letters we didnt get to in the other word
+            if w1_i >= len(word1):
+                return len(word2) - w2_i
+            if w2_i >= len(word2):
+                return len(word1) - w1_i
             
-            if word1[len_str_1 - 1] == word2[len_str_2 - 1]:
-                return dp(len_str_1 - 1, len_str_2 - 1)
-            else:
-                insert_cost = dp(len_str_1, len_str_2 - 1)
-                delete_cost = dp(len_str_1 - 1, len_str_2)
-                replace_cost = dp(len_str_1 - 1, len_str_2 - 1)
-                
-                return min(insert_cost, delete_cost, replace_cost) + 1
+            if word1[w1_i] == word2[w2_i]:
+                return dp(w1_i + 1, w2_i + 1) # already equal
+            
+            replace = dp(w1_i + 1, w2_i + 1) # represents that we moved what we need from w2 and replacing it with a letter we dont need in w1, so we dealt with both positions
+            remove = dp(w1_i + 1, w2_i) # represents dealing with the letter we need to get rid of in w1
+            insert = dp(w1_i, w2_i + 1) # represents dealing with the letter we need from w2 and putting in it w1
+
+            return min(replace, remove, insert) + 1
         
-        return dp(len(word1), len(word2))
+        return dp(0, 0)

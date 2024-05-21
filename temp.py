@@ -1,45 +1,24 @@
 from functools import lru_cache
 
 class Solution:
-
-    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
-        # if the last state is true and we can appended a word in the dict, mark this state as valid
-        word_set = set(wordDict)
-        n = len(s)
-        dp = [False] * (n + 1) # account for empty string
-        dp[0] = True # empty string
-
-        for end in range(1, n + 1):
-            for start in range(end):
-                word = s[start:end]
-                if dp[start] and word in word_set:
-                    dp[end] = True
-                    break
+    def minDistance(self, word1: str, word2: str) -> int:
         
-        return dp[n]
-
-    # unnecessary dp calls
-    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
-        # when we find a word, use to dp to take that word and not take it
-
         @lru_cache(maxsize=None)
-        def dp(start, end):
-            word = s[start:end + 1]
+        def dp(w1_i, w2_i):
+            
+            # reaching the end of a word, remaining operations is how many letters we didnt get to in the other word
+            if w1_i >= len(word1):
+                return len(word2) - w2_i
+            if w2_i >= len(word2):
+                return len(word1) - w1_i
+            
+            if word1[w1_i] == word2[w2_i]:
+                return dp(w1_i + 1, w2_i + 1) # already equal
+            
+            replace = dp(w1_i + 1, w2_i + 1) # represents that we moved what we need from w2 and replacing it with a letter we dont need in w1, so we dealt with both positions
+            remove = dp(w1_i + 1, w2_i) # represents dealing with the letter we need to get rid of in w1
+            insert = dp(w1_i, w2_i + 1) # represents dealing with the letter we need from w2 and putting in it w1
 
-            if end == len(s) - 1:
-                if word in word_set:
-                    return True
-                return False
-
-            if word in word_set:
-                take = dp(end + 1, end + 1)
-                dont_take = dp(start, end + 1)
-
-                return any([take, dont_take])
-            else:
-                return dp(start, end + 1) # dont take
-
-
-        word_set = set(wordDict)
-
+            return min(replace, remove, insert) + 1
+        
         return dp(0, 0)
