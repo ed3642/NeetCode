@@ -1,24 +1,49 @@
+import bisect
 from functools import lru_cache
 
 class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
+
+    # nice bisect solution
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        subseq = [nums[0]]
+
+        for num in nums[1:]:
+            if num > subseq[-1]:
+                subseq.append(num)
+            else:
+                insert_at = bisect.bisect_left(subseq, num)
+                subseq[insert_at] = num
+
+        return len(subseq)
+
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        n = len(nums)
+        dp = [1] * n
+
+        for end in range(n):
+            for start in range(end):
+                if nums[end] > nums[start]:
+                    take = dp[start] + 1
+                    leave = dp[end]
+                    dp[end] = max(take, leave)
+        
+        return max(dp)
+
+    def lengthOfLIS2(self, nums: list[int]) -> int:
+        # explore paths of taking or not taking each option
+        #  this works but uses too much memory
         
         @lru_cache(maxsize=None)
-        def dp(w1_i, w2_i):
+        def dp(i, prev_largest):
             
-            # reaching the end of a word, remaining operations is how many letters we didnt get to in the other word
-            if w1_i >= len(word1):
-                return len(word2) - w2_i
-            if w2_i >= len(word2):
-                return len(word1) - w1_i
+            if i >= len(nums):
+                return 0
             
-            if word1[w1_i] == word2[w2_i]:
-                return dp(w1_i + 1, w2_i + 1) # already equal
-            
-            replace = dp(w1_i + 1, w2_i + 1) # represents that we moved what we need from w2 and replacing it with a letter we dont need in w1, so we dealt with both positions
-            remove = dp(w1_i + 1, w2_i) # represents dealing with the letter we need to get rid of in w1
-            insert = dp(w1_i, w2_i + 1) # represents dealing with the letter we need from w2 and putting in it w1
+            if nums[i] > prev_largest:
+                take = dp(i + 1, nums[i]) + 1
+                leave = dp(i + 1, prev_largest)
 
-            return min(replace, remove, insert) + 1
+                return max(take, leave)
+            return dp(i + 1, prev_largest) # leave
         
-        return dp(0, 0)
+        return dp(0, -float('inf'))
