@@ -1,23 +1,23 @@
-from collections import defaultdict
-
 class Solution:
-    def beautifulSubsets(self, nums: list[int], k: int) -> int:
-        # gen subsets and prune the search
-        # keep a running dict of the path so far
+    def partition(self, s: str) -> list[list[str]]:
+        
+        def backtrack(start, builder):
+            if start == len(s):
+                res.append(builder.copy())
+            
+            if start >= len(s):
+                return
+            
+            for end in range(start, len(s)):
+                contiguous_section = s[start:end + 1]
+                if is_pal(contiguous_section):
+                    builder.append(contiguous_section)
+                    backtrack(end + 1, builder)
+                    builder.pop()
 
-        def backtrack(start, path_num_freq):
-            nonlocal res
-
-            for i in range(start, len(nums)):
-                op_1 = nums[i] + k
-                op_2 = nums[i] - k
-                # valid path if we dont have these
-                if path_num_freq[op_1] == 0 and path_num_freq[op_2] == 0:
-                    res += 1
-                    path_num_freq[nums[i]] += 1
-                    backtrack(i + 1, path_num_freq)
-                    path_num_freq[nums[i]] -= 1
-
-        res = 0
-        backtrack(0, defaultdict(int))
+        def is_pal(string):
+            return string == string[::-1]
+        
+        res = []
+        backtrack(0, [])
         return res
