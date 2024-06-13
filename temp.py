@@ -1,17 +1,26 @@
+from functools import lru_cache
+
 class Solution:
-    def appendCharacters(self, s: str, t: str) -> int:
-        # process the ones that are there, append the ones we didnt find
+    
+    def canPartition(self, nums: list[int]) -> bool:
+        # really strange that putting the recursive calls straight into the return
+        # makes this not MLE. If i assign take = ... and leave = ..., this will MLE.
+        @lru_cache(maxsize=None)
+        def can_partition(i, _sum):
+            if _sum == 0:
+                return True
+            if i >= len(nums) or _sum < 0:
+                return False
+            
+            return (
+                can_partition(i + 1, _sum - nums[i]) or # take
+                can_partition(i + 1, _sum)) # leave
 
-        a = 0
-        b = 0
-        s_len = len(s)
-        t_len = len(t)
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+        
+        half = total // 2
+        nums.sort(reverse=True) # using the biggest numbers first makes us find a solution faster, it will still work even if we dont sort but it is slower.
 
-        while a < s_len and b < t_len:
-            if s[a] == t[b]:
-                b += 1
-            a += 1
-
-        need = t_len - b
-
-        return need
+        return can_partition(0, half)

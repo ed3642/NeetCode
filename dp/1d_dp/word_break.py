@@ -2,6 +2,44 @@ from functools import lru_cache
 
 class Solution:
 
+    # most intuitive
+    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
+
+        @lru_cache(maxsize=None)
+        def can_break(start): # can break starting from
+
+            if start >= len(s):
+                return True
+
+            for word in wordDict:
+                end = start + len(word)
+                if end > len(s):
+                    continue
+                substr = s[start:end]
+                if substr == word and can_break(end):
+                    return True
+            return False
+
+        return can_break(0)
+                    
+    # fastest
+    def wordBreak2(self, s: str, wordDict: list[str]) -> bool:
+        
+        n = len(s)
+        can_break = [False] * (n + 1) # can break starting from
+        can_break[n] = True # empty str
+
+        for start in range(n - 1, -1, -1):
+            for word in wordDict:
+                end = start + len(word)
+                if end > n:
+                    continue
+                substr = s[start:end]
+                if substr == word and can_break[end]:
+                    can_break[start] = True
+        
+        return can_break[0]
+
     def wordBreak(self, s: str, wordDict: list[str]) -> bool:
         # if the last state is true and we can appended a word in the dict, mark this state as valid
         word_set = set(wordDict)
