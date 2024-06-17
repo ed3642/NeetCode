@@ -1,50 +1,34 @@
+from collections import Counter
 from functools import lru_cache
 
 class Solution:
-    # first time i see the topdown solution be faster than the bottom up
-    def canPartition(self, nums: list[int]) -> bool:
+
+    def maximumTotalDamage(self, power: list[int]) -> int:
         
-        @lru_cache(maxsize=None)
-        def can_partition(i, _sum):
+        freqs = Counter(power)
+        spells = sorted(freqs.keys())
+        n = len(spells)
+        totals = [0] * (n + 1)
+        for spell in range(n):
+            totals[spell] = spells[spell] * freqs[spells[spell]]
+        
+        max_dmg = [0] * (n + 1)
+        max_dmg[0] = 0
+        max_dmg[1] = totals[0]
+        for i in range(2, n + 1):
+            spell = i - 1 # index is shifted by 1
+            this_dmg = totals[spell]
 
-            if _sum == 0:
-                return True
-            if i >= len(nums) or _sum < 0: # prune the search
-                return False
-
-            return (
-                can_partition(i + 1, _sum - nums[i]) or # take
-                can_partition(i + 1, _sum) # leave
-            )
+            last_spell = spell - 1
+            while (last_spell >= 0 and 
+                   (spells[last_spell] == spells[spell] - 1 or
+                    spells[last_spell] == spells[spell] - 2)
+            ):
+                last_spell -= 1
             
-        total = sum(nums)
-        if total % 2 != 0:
-            return False
-        nums.sort(reverse=True) # using the biggest numbers first gets us a solution faster, not sorting still works but is slower
-        half = total // 2 
-        return can_partition(0, half)
-
-    def canPartition(self, nums: list[int]) -> bool:
-        total = sum(nums)
-        if total % 2 != 0:
-            return False
-        nums.sort(reverse=True)
-        half = total // 2
-        n = len(nums)
-        # can_par[index][_sum] -> up to index, can we find subseq that sums to _sum
-        can_par = [[False for _ in range(half + 1)] for _ in range(n + 1)]
-        for i in range(n + 1):
-            can_par[i][0] = True
-
-        for end in range(1, n + 1):
-            num = nums[end - 1]
-            for _sum in range(half + 1):
-                if num <= _sum:
-                    can_par[end][_sum] = (
-                        can_par[end - 1][_sum - num] or
-                        can_par[end - 1][_sum]
-                    )
-                else:
-                    can_par[end][_sum] = can_par[end - 1][_sum]
-
-        return can_par[n][half]
+            max_dmg[i] = max(
+                max_dmg[i - 1],
+                max_dmg[last_spell + 1] + this_dmg
+            )
+        
+        return max_dmg[n]
