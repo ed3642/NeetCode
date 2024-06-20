@@ -4,35 +4,36 @@ from functools import lru_cache
 class Solution:
 
     # nice solution
-    # like delete and earn but we cant use i-2,i-1,i+1,i+2 when choosing i.
     def maximumTotalDamage(self, power: list[int]) -> int:
-        calc_total = lambda i: spells[i] * freqs[spells[i]]
-
+        # like delete and earn but we cant use i-2,i-1,i+1,i+2 when choosing i.
+        # like delete and earn problem but we have to find the last valid state with a while loop
         freqs = Counter(power)
         spells = sorted(freqs.keys())
         n = len(spells)
-
-        # Add an initial state to represent the empty spell
+        calc_total = lambda x: spells[x] * freqs[spells[x]]
+        totals = list(map(calc_total, range(n)))
         max_dmg = [0] * (n + 1)
-        max_dmg[1] = calc_total(0)
 
-        for i in range(2, n + 1):
-            this_dmg = calc_total(i - 1)
+        for dp_i in range(1, n + 1):
+            spell_i = dp_i - 1
+            this_dmg = totals[spell_i]
 
-            # get the last valid spell
-            prev_spell = i - 1
-            while (prev_spell > 0 and 
-                   (spells[prev_spell - 1] == spells[i - 1] - 1 or
-                    spells[prev_spell - 1] == spells[i - 1] - 2)):
-                prev_spell -= 1
+            # find the last spell that was casted
+            last_spell = spell_i - 1
+            while (last_spell >= 0 and (
+                spells[last_spell] == spells[spell_i] - 1 or
+                spells[last_spell] == spells[spell_i] - 2
+            )):
+                last_spell -= 1
             
-            # transition
-            max_dmg[i] = max(
-                max_dmg[i - 1],  # leave
-                max_dmg[prev_spell] + this_dmg  # take
+            # state transition
+            last_spell_dp_i = last_spell + 1
+            max_dmg[dp_i] = max(
+                max_dmg[last_spell_dp_i] + this_dmg, # take
+                max_dmg[dp_i - 1] # leave
             )
-
-        return max_dmg[-1]
+        
+        return max_dmg[n]
 
     # this uses too much memory
     def maximumTotalDamage(self, power: list[int]) -> int:

@@ -71,3 +71,52 @@ class SegmentTree:
                 update_util(mid + 1, se, 2 * si + 2)
                 self.tree[si] = self.function(self.tree[2 * si + 1], self.tree[2 * si + 2])
         update_util(0, self.n - 1, 0)
+
+import bisect
+
+class Solution:
+
+    # nice solution
+    def maxProfitAssignment(self, difficulty: list[int], profit: list[int], worker: list[int]) -> int:
+        # instead of a segment tree, we can keep track of the most profitable with just an arr
+        # find range of jobs that worker[i] can do and get the max from the segment tree
+
+        # keeps the arrays in relative order after sorting by difficulty
+        jobs = sorted(zip(difficulty, profit))
+        difficulty, profit = map(list, zip(*jobs))
+
+        for i in range(1, len(profit)):
+            profit[i] = max(profit[i - 1], profit[i])
+
+        max_profit = 0
+        for skill in worker:
+            # find the job that is still in range of skill
+            hardest_job = bisect.bisect_right(difficulty, skill)  # Use bisect_right with skill
+
+            if hardest_job != 0:
+                max_profit += profit[hardest_job - 1]  # Query up to hardest_job - 1
+            
+        return max_profit
+
+    def maxProfitAssignment(self, difficulty: list[int], profit: list[int], worker: list[int]) -> int:
+        # segment tree and and binary search
+        # find range of jobs that worker[i] can do and get the max from the segment tree
+
+        # keeps the arrays in relative order after sorting by difficulty
+        jobs = sorted(zip(difficulty, profit))
+        difficulty, profit = map(list, zip(*jobs))
+        seg_tree = SegmentTree(profit, max)
+        max_profit = 0
+
+        for skill in worker:
+            # find the job that is still in range of skill
+            hardest_job = bisect.bisect_right(difficulty, skill)  # Use bisect_right with skill
+
+            if hardest_job != 0:
+                best = seg_tree.range_query(0, hardest_job - 1)  # Query up to hardest_job - 1
+                max_profit += best
+            
+        return max_profit
+    
+s = Solution()
+print(s.maxProfitAssignment([13,37,58], [4,90,96], [34,73,45]))
