@@ -1,6 +1,7 @@
 import heapq
 from collections import deque
 
+# https://leetcode.com/problems/network-delay-time/
 class Solution:
     # NOTE: nodes go from 1..n
     def networkDelayTime(self, times: list[list[int]], n: int, k: int) -> int:
@@ -39,6 +40,7 @@ class Solution:
     
     def networkDelayTime2(self, times: list[list[int]], n: int, k: int) -> int:
         # SPFA with in_queue improvement
+        # NOTE: in_queue can only be used for positive weighted graphs
 
         # make adjacency list
         adj_list = [[] for _ in range(n + 1)]

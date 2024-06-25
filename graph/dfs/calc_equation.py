@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 class Solution:
+    # https://leetcode.com/problems/evaluate-division/description/
     def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
         # reverse all known edges with 1/weight
         # dfs with a running multiplication from source -> dest for each query

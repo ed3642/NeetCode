@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 class Solution:
+    # https://leetcode.com/problems/valid-arrangement-of-pairs/description/
     def validArrangement(self, pairs: list[list[int]]) -> list[list[int]]:
         # hierholzers algo
         # hard part if finding starting node
@@ -24,7 +25,9 @@ class Solution:
         # find the starting node in directed graph
         starting_node = pairs[0][0] # if it turns out its not a path, but a circuit, we start anywhere
         for node, out_degree in out_degrees.items():
-            # if its a eulerian path there is exactly 1 node that meets this condition
+            # if its a eulerian path there is exactly 1 node that meets this condition, this is the start of the path
+            # NOTE: there is also a node in-degree - out-degree == 1, this is the end of the path
+            # there are always 0 or 2 nodes with odd degrees in a eulerian path.
             if out_degree - in_degrees[node] == 1:
                 starting_node = node
                 break

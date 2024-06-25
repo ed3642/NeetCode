@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 class Solution:
+    # https://leetcode.com/problems/reconstruct-itinerary/
     def findItinerary(self, tickets: list[list[str]]) -> list[str]:
         # dfs variation (hierholzer algorithm)
         # eulerian path

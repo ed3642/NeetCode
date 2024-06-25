@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 class Solution:
+    # https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/description/
     def minReorder(self, n: int, connections: list[list[int]]) -> int:
         # tree structure
         # all cities are connected by 1 or 2 single direction edge

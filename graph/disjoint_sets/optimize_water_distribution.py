@@ -28,6 +28,7 @@ class DisjointSet:
     def are_connected(self, a, b):
         return self.find(a) == self.find(b)
 
+# https://leetcode.com/problems/optimize-water-distribution-in-a-village/
 class Solution:
     # the key was to represent the nodes val (building that well) as
     # a dummy node with the nodes val as its weight

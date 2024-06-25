@@ -8,6 +8,24 @@ class Node:
         self.neighbors = neighbors if neighbors is not None else []
 
 class Solution:
+    # better
+    def cloneGraph2(self, node: Optional['Node']) -> Optional['Node']:
+        if node == None:
+            return None
+
+        def dfs(node):
+            if node in visited:
+                return visited[node]
+
+            clone = Node(node.val)
+            visited[node] = clone
+            for neighbor in node.neighbors:
+                clone.neighbors.append(dfs(neighbor))
+            return clone
+        
+        visited = {}
+        return dfs(node)
+
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         if node == None:
             return None
@@ -31,21 +49,3 @@ class Solution:
                 new_node.neighbors.append(hm_nodes[neighbor])
         
         return hm_nodes[node]
-    
-    # better
-    def cloneGraph2(self, node: Optional['Node']) -> Optional['Node']:
-        if node == None:
-            return None
-
-        def dfs(node):
-            if node in visited:
-                return visited[node]
-
-            clone = Node(node.val)
-            visited[node] = clone
-            for neighbor in node.neighbors:
-                clone.neighbors.append(dfs(neighbor))
-            return clone
-        
-        visited = {}
-        return dfs(node)

@@ -1,6 +1,7 @@
 import heapq
 from collections import defaultdict
-# TODO: some test still fail
+
+# https://leetcode.com/problems/connecting-cities-with-minimum-cost/description/
 class Solution:
     def minimumCost(self, n: int, connections: list[list[int]]) -> int:
         # Prims

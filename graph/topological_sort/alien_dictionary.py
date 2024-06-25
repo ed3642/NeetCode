@@ -1,5 +1,6 @@
 from collections import deque
 
+# https://leetcode.com/problems/alien-dictionary/
 class Solution:
     # the key was to represent the dependency between the nodes by finding the first
     # difference in adjacent string pairs

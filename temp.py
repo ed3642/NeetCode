@@ -1,17 +1,27 @@
-from functools import lru_cache
+#!/bin/python3
 
-class Solution:
+import math
+import os
+import random
+import re
+import sys
 
-    def findTargetSumWays(self, nums: list[int], target: int) -> int:
-        
-        @lru_cache(maxsize=None)
-        def num_ways(i, _sum):
-            if i >= len(nums):
-                if _sum == target:
-                    return 1
-                return 0
 
-            return num_ways(i + 1, _sum + nums[i]) + num_ways(i + 1, _sum + (nums[i] * -1))
-            
-        return num_ways(0, 0)
-    
+
+#
+# Complete the 'findMinimumOperations' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts STRING image as parameter.
+#
+
+def findMinimumOperations(image):
+    # Write your code here
+    # greedy?
+
+    ops = 0
+    bits = list(int(ch) for ch in image)
+
+    for i in range(len(image)):
+        ...
+

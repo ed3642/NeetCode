@@ -1,7 +1,9 @@
 from collections import deque
 import heapq
 
+# https://leetcode.com/problems/cheapest-flights-within-k-stops/
 class Solution:
+
     def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
         # SPFA
 
@@ -21,7 +23,8 @@ class Solution:
                 neighbor_price, neighbor_node = neighbor
 
                 candidate_price = price + neighbor_price
-                if candidate_price < prices[neighbor_node] and stops <= k: # only add if we dont exceed k stops
+                # only add if we dont exceed k stops
+                if candidate_price < prices[neighbor_node] and stops <= k: 
                     prices[neighbor_node] = candidate_price
                     queue.append((prices[neighbor_node], stops + 1, neighbor_node))
         
@@ -52,9 +55,11 @@ class Solution:
                     queue.append((candidate_price, num_stops + 1, neighbor_node))
 
         return prices[dst] if prices[dst] != float('inf') else -1
-
+    
+    # not as intuitive for this problem as SPFA, both perform the same
     def findCheapestPrice3(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
         # modified dijkstra
+        # min path with k-stops constraint
             
         adj_list = [[] for _ in range(n)]
         for v_from, v_to, price in flights:

@@ -28,6 +28,7 @@ class DisjointSets:
             groups[self.find(parent)].append(i)
         return groups
 
+# https://leetcode.com/problems/smallest-string-with-swaps/description/
 class Solution:
     def smallestStringWithSwaps(self, s: str, pairs: list[list[int]]) -> str:
         res = list(s)
