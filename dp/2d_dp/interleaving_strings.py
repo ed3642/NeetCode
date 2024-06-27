@@ -1,6 +1,5 @@
 from functools import lru_cache
 
-
 class Solution:
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
         # at first i had is_valid(i1, i2, i3) but we can just calculate i3 from the other 2 variables

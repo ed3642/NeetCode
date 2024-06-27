@@ -32,7 +32,7 @@ class Solution:
         return res
 
     # monotonic dec queue
-    # O(n)
+    # O(n), since each elem is only ever push into and pop out of the queue (2n)
     def maxSlidingWindow2(self, nums: list[int], k: int) -> list[int]:
         def add_to_window(window, i):
             val = nums[i]
@@ -60,3 +60,6 @@ class Solution:
             r += 1
         
         return res
+    
+s = Solution()
+print(s.maxSlidingWindow2(nums = [1,3,-1,-3,5,3,6,7], k = 3))
