@@ -1,10 +1,10 @@
+# https://leetcode.com/problems/all-ancestors-of-a-node-in-a-directed-acyclic-graph
 from collections import deque
-
 
 class Solution:
     def getAncestors(self, n: int, edges: list[list[int]]) -> list[list[int]]:
         # topological sort
-        # append ancestors to "node" since we should have recorded all of the ancestors before "node" since we topologically sorted
+        # add all ancestors of "node" since we should have recorded all of the ancestors before "node" since we topologically sorted
 
         def dfs(node, ancestors):
             if not node:
