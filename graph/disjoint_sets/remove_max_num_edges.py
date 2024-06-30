@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/
 class DisjointSet:
     def __init__(self, n):
         self.parent = {node: node for node in range(1, n + 1)}

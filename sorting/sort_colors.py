@@ -4,6 +4,8 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
         # dutch national flag problem
+        # l and r are where you place the 0's and 2's
+        # i is the elem were inspecting
         
         l = 0
         r = len(nums) - 1
