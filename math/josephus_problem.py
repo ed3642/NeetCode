@@ -1,4 +1,4 @@
-from collections import deque
+# https://leetcode.com/problems/find-the-winner-of-the-circular-game
 
 class Solution:
     # O(n)
@@ -29,6 +29,3 @@ class Solution:
                 streak = 0
 
         return queue[0]
-
-s = Solution()
-print(s.findTheWinner(5, 2))

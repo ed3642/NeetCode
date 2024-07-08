@@ -9,6 +9,7 @@ class TreeNode:
         self.right = right
         
 class Solution:
+
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
         # store cumulative sum in dict and see how many times this sum has occured so far
         # this is like prefix sum questions but with a binary tree we have to backtrack the prefix sums when processing another branch of the tree

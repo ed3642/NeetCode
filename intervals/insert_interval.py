@@ -1,16 +1,29 @@
+# https://leetcode.com/problems/insert-interval/description/
 class Solution:
     def insert(self, intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:
-        interval_span = [0, 0]
-        new_intervals = []
-        l = newInterval[0]
-        r = newInterval[1]
-
-        for start, end in intervals:
-            if l >= start:
-                interval_span[0] = start
-            if r <= end:
-                interval_span[1] = end
-            if l < start and r > end:
-                new_intervals.append([start, end])
         
-        return new_intervals
+        res = []
+        insert_start, insert_end = newInterval
+        n = len(intervals)
+        placed = False
+
+        i = 0
+        while i < n:
+            start, end = intervals[i]
+            if end >= insert_start: # intersects
+                insert_start = min(start, insert_start)
+                while i < n and intervals[i][0] <= insert_end: # skip intersecting intervals
+                    insert_end = max(intervals[i][1], insert_end)
+                    i += 1
+                res.append([insert_start, insert_end]) # append new interval
+                placed = True
+                while i < n: # append the remaining
+                    res.append(intervals[i])
+                    i += 1
+            else:
+                res.append(intervals[i])
+            i += 1
+
+        if not placed: # must be at the end
+            res.append(newInterval)
+        return res
