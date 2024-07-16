@@ -1,9 +1,41 @@
+# https://leetcode.com/problems/jump-game-ii
 class Solution:
     
     def jump(self, nums: list[int]) -> int:
+        # [2,3,1,1,4]
+        # [2,4,3,4,8]
+        if len(nums) == 1:
+            return 0
+        calc_max_pos = lambda i: i + nums[i]
+
+
+        n = len(nums)
+        start = 0
+        if calc_max_pos(0) >= n - 1: # can reach the end on the first jump
+            return 1
+        end = 1
+        jumps = 1
+        best_pos = -float('inf')
+        best_val = -float('inf')
+        while end < n - 1:
+            max_pos = calc_max_pos(start)
+            while end <= max_pos:
+                reaches = calc_max_pos(end)
+                if best_val < reaches:
+                    best_val = reaches
+                    best_pos = end
+                    if reaches >= n - 1: # First elem that can reach the end
+                        return jumps + 1
+                end += 1
+            start = best_pos
+            jumps += 1
+        
+        return jumps
+
+    def jump(self, nums: list[int]) -> int:
         # basically make the best jump
 
-        # worth of a positio n
+        # worth of a position
         def heuristic(i):
             return (nums[i] + i)
 
