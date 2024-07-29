@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/count-number-of-teams/
 class FenwickTree:
     # 1 based indexing, 0th elem is ignored
     # inclusive ranges
@@ -28,6 +29,7 @@ class FenwickTree:
         return self.query(max_index) - self.query(min(value, max_index))
 
 class Solution:
+    # O(n log _max)
     def numTeams(self, rating: list[int]) -> int:
         n = len(rating)
         count = 0
