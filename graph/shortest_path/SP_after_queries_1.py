@@ -3,6 +3,7 @@ import heapq
 # https://leetcode.com/problems/shortest-distance-after-road-addition-queries-i/
 
 class Solution:
+    # O(q n^2)
     def shortestDistanceAfterQueries(self, n: int, queries: list[list[int]]) -> list[int]:
         # BFS, update the shortest path to only the nodes affected, not the entire graph
 
@@ -39,6 +40,7 @@ class Solution:
         
         return shortest
 
+    # O(q n^2 logn)
     def shortestDistanceAfterQueries(self, n: int, queries: list[list[int]]) -> list[int]:
 
         # run djisktras every query

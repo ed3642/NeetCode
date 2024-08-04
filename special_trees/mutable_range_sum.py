@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/range-sum-query-mutable/description/
 class NumArray:
 
     def __init__(self, nums: list[int]):
