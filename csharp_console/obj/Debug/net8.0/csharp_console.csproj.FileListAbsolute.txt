@@ -1,0 +1,15 @@
+c:\Git_Projects\NeetCode\csharp_console\bin\Debug\net8.0\csharp_console.exe
+c:\Git_Projects\NeetCode\csharp_console\bin\Debug\net8.0\csharp_console.deps.json
+c:\Git_Projects\NeetCode\csharp_console\bin\Debug\net8.0\csharp_console.runtimeconfig.json
+c:\Git_Projects\NeetCode\csharp_console\bin\Debug\net8.0\csharp_console.dll
+c:\Git_Projects\NeetCode\csharp_console\bin\Debug\net8.0\csharp_console.pdb
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.GeneratedMSBuildEditorConfig.editorconfig
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.AssemblyInfoInputs.cache
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.AssemblyInfo.cs
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.csproj.CoreCompileInputs.cache
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.sourcelink.json
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.dll
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\refint\csharp_console.dll
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.pdb
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\csharp_console.genruntimeconfig.cache
+c:\Git_Projects\NeetCode\csharp_console\obj\Debug\net8.0\ref\csharp_console.dll

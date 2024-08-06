@@ -1,22 +1,19 @@
+from collections import Counter
+
 class Solution:
-    def kthDistinct(self, arr: list[str], k: int) -> str:
-        seen = set()
-        unique = set()
+    def minimumPushes(self, word: str) -> int:
+        # 8 btns that can be mapped to
+        # map in order of freq
+        counts = sorted(Counter(word).items(), key=lambda x: -x[1])
 
-        for c in arr:
-            if c not in seen:
-                seen.add(c)
-                unique.add(c)
-            elif c in unique:
-                unique.remove(c)
-
-        unique_order_pos = 0
-        for c in arr:
-            if c in unique:
-                unique_order_pos += 1
-            if unique_order_pos == k:
-                return c
-            elif unique_order_pos >= len(unique):
-                return ''
+        pushes = 0
+        depth = 1
+        mapping_to = 0 # index of button
+        for _, f in counts:
+            pushes += depth * f
+            mapping_to += 1
+            if mapping_to == 8:
+                depth += 1
+                mapping_to = 0
         
-        return ''
+        return pushes

@@ -1,6 +1,9 @@
 {
   "files.associations": {
     "ostream": "cpp",
-    "iostream": "cpp"
-  }
+    "iostream": "cpp",
+    "vector": "cpp",
+    "unordered_map": "cpp"
+  },
+  "dotnet.defaultSolution": "csharp_console.sln"
 }
