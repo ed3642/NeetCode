@@ -1,51 +1,53 @@
 class Solution:
-    def numberToWords(self, num: int) -> str:
-        mappings = {
-            0: "Zero",
-            1: "One",
-            2: "Two",
-            3: "Three",
-            4: "Four",
-            5: "Five",
-            6: "Six",
-            7: "Seven",
-            8: "Eight",
-            9: "Nine",
-            10: "Ten",
-            11: "Eleven",
-            12: "Twelve",
-            13: "Thirteen",
-            14: "Fourteen",
-            15: "Fifteen",
-            16: "Sixteen",
-            17: "Seventeen",
-            18: "Eighteen",
-            19: "Nineteen",
-            20: "Twenty",
-            30: "Thirty",
-            40: "Forty",
-            50: "Fifty",
-            60: "Sixty",
-            70: "Seventy",
-            80: "Eighty",
-            90: "Ninety",
-        }
+    def numMagicSquaresInside(self, grid: list[list[int]]) -> int:
+        # 3x3 must have nums in [1,9]
 
-        if num == 0:
-            return mappings[0]
+        def is_magic_square(i, j):
+            needed = set([i for i in range(1, 10)])
+            for it in range(3):
+                for it2 in range(3):
+                    if 0 < grid[i + it][j + it2] < 10:
+                        if grid[i + it][j + it2] in needed:
+                            needed.remove(grid[i + it][j + it2])
+                    else:
+                        return False
+            if len(needed) != 0:
+                return False
+            # rows
+            row_sum = grid[i][j] + grid[i][j + 1] + grid[i][j + 2]
+            for it in range(1, 3):
+                _sum = 0
+                for it2 in range(3):
+                    _sum += grid[i + it][j + it2]
+                if _sum != row_sum:
+                    return False
+            # cols
+            col_sum = grid[i][j] + grid[i + 1][j] + grid[i + 2][j]
+            if row_sum != col_sum:
+                return False
+            for it in range(1, 3):
+                _sum = 0
+                for it2 in range(3):
+                    _sum += grid[i + it2][j + it]
+                if _sum != col_sum:
+                    return False
+            # diagonals
+            diag1 = grid[i][j] + grid[i + 1][j + 1] + grid[i + 2][j + 2]
+            if row_sum != diag1:
+                return False
+            diag2 = grid[i + 2][j] + grid[i + 1][j + 1] + grid[i][j + 2]
+            if diag1 != diag2:
+                return False
+            # all clear
+            return True
 
-        def helper(n):
-            if n <= 20:
-                return mappings[n]
-            elif n < 100:
-                return mappings[n // 10 * 10] + ('' if n % 10 == 0 else ' ' + mappings[n % 10])
-            elif n < 1000:
-                return mappings[n // 100] + ' Hundred' + ('' if n % 100 == 0 else ' ' + helper(n % 100))
-            elif n < 1000000:
-                return helper(n // 1000) + ' Thousand' + ('' if n % 1000 == 0 else ' ' + helper(n % 1000))
-            elif n < 1000000000:
-                return helper(n // 1000000) + ' Million' + ('' if n % 1000000 == 0 else ' ' + helper(n % 1000000))
-            else:
-                return helper(n // 1000000000) + ' Billion' + ('' if n % 1000000000 == 0 else ' ' + helper(n % 1000000000))
+        count = 0
+        n = len(grid)
+        m = len(grid[0])
+        
+        for i in range(n - 2):
+            for j in range(m - 2):
+                if is_magic_square(i, j):
+                    count += 1
 
-        return helper(num)
+        return count

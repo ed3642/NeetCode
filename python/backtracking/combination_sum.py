@@ -1,25 +1,23 @@
+# https://leetcode.com/problems/combination-sum/
 class Solution:
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        
+        def backtrack(start, builder: list, curr_sum):
+            if curr_sum > target:
+                return 
+            if curr_sum == target:
+                combinations.append(builder.copy())
+                return 
 
-        def backtrack(i, total, builder):
-            
-            if total == target:
-                res.append(builder.copy())
-                return
-            
-            if total > target:
-                return
-
-            for j in range(i, len(candidates)):
-                builder.append(candidates[j])
-                total += candidates[j]
-                backtrack(j, total, builder)
+            for i in range(start, len(candidates)):
+                builder.append(candidates[i])
+                backtrack(i, builder, curr_sum + candidates[i])
                 builder.pop()
-                total -= candidates[j]
-            
-        res = []
-        backtrack(0, 0, [])
-        return res
+
+        combinations = []
+        candidates.sort()
+        backtrack(0, [], 0)
+        return combinations
     
     def combinationSum2(self, candidates: list[int], target: int) -> list[list[int]]:
         def backtrack(start, builder: list[int]):

@@ -10,17 +10,17 @@ class TreeNode:
 class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
         
-        def dfs(l, r):
-            if bool(l) ^ bool(r):
+        def dfs(left_child, right_child):
+            if bool(left_child) ^ bool(right_child):
                 return False
-            if not l and not r:
+            if not left_child and not right_child:
                 return True
-            if l.val != r.val:
+            if left_child.val != right_child.val:
                 return False
             
-            left = dfs(l.right, r.left)
-            right = dfs(l.left, r.right)
-            if l.val == r.val and left and right:
-                return True
-            
+            res_1 = dfs(left_child.left, right_child.right)
+            res_2 = dfs(left_child.right, right_child.left)
+            return res_1 and res_2
+
+
         return dfs(root.left, root.right)

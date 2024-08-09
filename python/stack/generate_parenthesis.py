@@ -1,6 +1,26 @@
-from collections import deque
-
+# https://leetcode.com/problems/generate-parentheses
 class Solution:
+    def generateParenthesis(self, n: int) -> list[str]:
+        
+        def backtrack(left_count, right_count, builder: list):
+            if left_count == right_count and left_count == n:
+                res.append(''.join(builder))
+                return None
+        
+            if left_count < n:
+                builder.append('(')
+                backtrack(left_count + 1, right_count, builder)
+                builder.pop()
+            if right_count < n and left_count > right_count:
+                builder.append(')')
+                backtrack(left_count, right_count + 1, builder)
+                builder.pop()
+
+
+        res = []
+        backtrack(0, 0, [])
+        return res
+
     def generateParenthesis(self, n: int) -> list[str]:
         def backtrack(string, left_backets, right_backets):
             if len(string) == n * 2:
@@ -40,7 +60,7 @@ class Solution:
     # iterative solution
     # imitating recursion with a stack
     def generateParenthesis2(n):
-        stack = deque() # (string, num_left_brackets, num_right_brackets)
+        stack = [] # (string, num_left_brackets, num_right_brackets)
         stack.append(('(', 1, 0))
         solutions = []
 

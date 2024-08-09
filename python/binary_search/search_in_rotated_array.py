@@ -1,5 +1,38 @@
 class Solution:
     def search(self, nums: list[int], target: int) -> int:
+        
+        def binary_search(l, r):
+            while l <= r:
+                m = (l + r) // 2
+                if nums[m] < target:
+                    l = m + 1
+                elif nums[m] > target:
+                    r = m - 1
+                else:
+                    return m
+            return -1
+        
+        # find the lowest point
+        l = 0
+        r = len(nums) - 1
+        while l < r:
+            m = (l + r) // 2
+            if nums[m] > nums[r]:
+                l = m + 1
+            else:
+                r = m
+
+        lowest_point_i = l
+        res1 = binary_search(0, lowest_point_i - 1)
+        res2 = binary_search(lowest_point_i, len(nums) - 1)
+
+        if res1 == -1 and res2 == -1:
+            return -1
+        elif res1 == -1:
+            return res2
+        return res1
+
+    def search(self, nums: list[int], target: int) -> int:
         # min is like the pivot in the rotated array
         def findMin(nums) -> int:
             n = len(nums)
