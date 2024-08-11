@@ -1,27 +1,42 @@
 
 class Solution:
-    # faster
-    def permute1(self, nums: list[int]) -> list[list[int]]:
-        def backtrack(builder):
-            if len(builder) == k:
-                res.append(builder.copy())
+    # best
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        def backtrack(start):
+            if start == len(nums):
+                res.append(nums.copy())
             
-            for i in range(0, len(nums)):
-                num = nums[i]
-                if not used_elems[i]:
-                    used_elems[i] = True
-                    builder.append(num)
-                    backtrack(builder)
-                    used_elems[i] = False
-                    builder.pop()
+            for i in range(start, len(nums)):
+                # swap with start
+                nums[start], nums[i] = nums[i], nums[start]
+                backtrack(start + 1)
+                # swap back to original positions
+                nums[start], nums[i] = nums[i], nums[start]
 
-        k = len(nums)
         res = []
-        used_elems = [False] * len(nums)
-        backtrack([])
+        backtrack(0)
         return res
 
-    # slower
+    # faster
+    def permute1(self, nums: list[int]) -> list[list[int]]:
+        def backtrack(builder: list):
+            if len(builder) == len(nums):
+                perms.append(builder.copy())
+
+            for i in range(len(nums)):
+                if not index_used[i]:
+                    index_used[i] = True
+                    builder.append(nums[i])
+                    backtrack(builder)
+                    index_used[i] = False
+                    builder.pop()
+
+        perms = []
+        index_used = [False] * len(nums)
+        backtrack([])
+        return perms
+
+    # slower, still more practical for memory safe
     def permute2(self, nums: list[int]) -> list[list[int]]:
         def backtrack(builder):
             if len(builder) == k:

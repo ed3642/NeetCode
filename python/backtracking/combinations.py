@@ -11,6 +11,7 @@ class Solution:
         def backtrack(start, builder):
             if len(builder) == k:
                 combs.append(builder.copy())
+                return
             
             for num in range(start, n + 1):
                 builder.append(num)

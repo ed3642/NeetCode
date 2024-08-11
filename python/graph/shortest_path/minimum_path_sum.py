@@ -1,6 +1,25 @@
+# https://leetcode.com/problems/minimum-path-sum
 import heapq
 
 class Solution:
+    def minPathSum(self, grid: list[list[int]]) -> int:
+        n = len(grid)
+        m = len(grid[0])
+
+        for i in range(n):
+            for j in range(m):
+                if i == 0 and j == 0:
+                    # this is the first cell, it remains unchaged
+                    continue
+                if i == 0:
+                    grid[0][j] += grid[0][j - 1]
+                elif j == 0:
+                    grid[i][0] += grid[i - 1][0]
+                else:
+                    grid[i][j] += min(grid[i - 1][j], grid[i][j - 1])
+        
+        return grid[n - 1][m - 1]
+
     # NOTE: this problem can more efficiently be solved with DP
     def minPathSum(self, grid: list[list[int]]) -> int:
         # dijkstra

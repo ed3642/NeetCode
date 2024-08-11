@@ -4,6 +4,27 @@ class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
         
         @lru_cache(maxsize=None)
+        def min_actions(i1, i2):
+            if i1 >= len(word1) and i2 >= len(word2):
+                return 0
+            if i1 >= len(word1) and not i2 >= len(word2):
+                return min_actions(i1, i2 + 1) + 1 # insert the rest of word2
+            if not i1 >= len(word1) and i2 >= len(word2):
+                return min_actions(i1 + 1, i2) + 1 # delete from word1 to make word2
+            if word1[i1] == word2[i2]:
+                return min_actions(i1 + 1, i2 + 1)
+            
+            return min(
+                min_actions(i1, i2 + 1), # insert
+                min_actions(i1 + 1, i2), # delete
+                min_actions(i1 + 1, i2 + 1) # replace
+            ) + 1
+
+        return min_actions(0, 0)
+
+    def minDistance(self, word1: str, word2: str) -> int:
+        
+        @lru_cache(maxsize=None)
         def dp(w1_i, w2_i):
             
             # reaching the end of a word, remaining operations is how many letters we didnt get to in the other word
