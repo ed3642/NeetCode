@@ -10,7 +10,7 @@ class NumArray:
         #     self.update_tree(i + 1, num)
 
         # O(n) way of initializing tree
-        # put in the values
+        # put in the values 
         for i in range(1, self.size + 1):
             self.tree[i] = self.nums[i - 1]
 
