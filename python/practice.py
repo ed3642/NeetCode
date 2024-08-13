@@ -5,7 +5,7 @@ class NumArray:
         self.tree = [0] * (self.size + 1)
         self.nums = nums.copy()
 
-        # O(n log n) way of initializing tree
+        # O(n log n) way of initializing tree 
         # for i, num in enumerate(nums):
         #     self.update_tree(i + 1, num)
 
