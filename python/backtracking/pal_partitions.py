@@ -2,6 +2,24 @@ class Solution:
     def partition(self, s: str) -> list[list[str]]:
         
         def backtrack(start, builder):
+            if start >= len(s):
+                partitions.append(builder.copy())
+                return
+
+            for end in range(start + 1, len(s) + 1):
+                word = s[start:end]
+                if word == word[::-1]:
+                    builder.append(word)
+                    backtrack(end, builder)
+                    builder.pop()
+
+        partitions = []
+        backtrack(0, [])
+        return partitions
+    
+    def partition(self, s: str) -> list[list[str]]:
+        
+        def backtrack(start, builder):
             if start == len(s):
                 res.append(builder.copy())
             

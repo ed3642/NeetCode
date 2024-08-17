@@ -1,6 +1,32 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         
+        def expand(i, is_even=False):
+            if is_even:
+                l = i
+                r = i + 1
+            else:
+                l = i - 1
+                r = i + 1
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                l -= 1
+                r += 1
+            return s[l + 1: r]
+
+        longest = ''
+        for i in range(len(s)):
+            candidate = expand(i)
+            if len(longest) < len(candidate):
+                longest = candidate
+        for i in range(len(s)):
+            candidate = expand(i, True)
+            if len(longest) < len(candidate):
+                longest = candidate
+        
+        return longest
+
+    def longestPalindrome(self, s: str) -> str:
+        
         def expand(i, reach=0, look_for_even=False):
             nonlocal longest
 

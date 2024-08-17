@@ -1,53 +1,44 @@
-# tarjans algorithm can be used for better solution
-# https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/editorial/
-# look at foundation material problems
+from functools import lru_cache
+
+
 class Solution:
-    def minDays(self, grid: list[list[int]]) -> int:
-        
-        def islands_count():
-            def dfs(i, j):
-                visited.add((i, j))
-                surrounding_water = 0
-                for d_i, d_j in directions:
-                    n_i = i + d_i
-                    n_j = j + d_j
-                    if is_valid(n_i, n_j):
-                        if grid[n_i][n_j] == 1 and (n_i, n_j) not in visited:
-                            dfs(n_i, n_j)
-                        elif grid[n_i][n_j] == 0:
-                            surrounding_water += 1
+    def maxPoints(self, points: list[list[int]]) -> int:
 
-            def is_valid(i, j):
-                return (
-                    i >= 0 and i < MAX_I and 
-                    j >= 0 and j < MAX_J
-                )
+        MAX_I = len(points)
+        MAX_J = len(points[0])
+        max_score = [[0 for _ in range(MAX_J)] for _ in range(MAX_I)]
 
-            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            num_islands = 0
-            visited = set()
+        for i in range(MAX_J):
+            max_score[0][i] = points[0][i]
 
-            for i in range(MAX_I):
-                for j in range(MAX_J):
-                    if grid[i][j] == 1 and (i, j) not in visited:
-                        dfs(i, j)
-                        num_islands += 1
-            return num_islands
+        for row_i in range(1, MAX_I):
+            for last_i_chosen in range(MAX_J):
+                best = 0
+                for i in range(MAX_J):
+                    minus = abs(last_i_chosen - i)
+                    best = max(
+                        max_score[row_i - 1][i] + points[row_i][last_i_chosen] - minus, 
+                        best)
+                max_score[row_i][last_i_chosen] = best
         
-        # exclusive maxes
-        MAX_I = len(grid)
-        MAX_J = len(grid[0])
+        return max(max_score[MAX_I - 1])
+
+    def maxPoints(self, points: list[list[int]]) -> int:
         
-        num_islands = islands_count()
-        if num_islands != 1:
-            return 0
-        
-        for i in range(MAX_I):
-            for j in range(MAX_J):
-                if grid[i][j] == 1:
-                    grid[i][j] = 0 
-                    count = islands_count()
-                    if 1 < count or count == 0:
-                        return 1
-                    grid[i][j] = 1 
-        return 2
+        @lru_cache(maxsize=None)
+        def max_score(row_i, last_i_chosen):
+            if row_i >= len(points):
+                return 0
+            
+            best = 0
+            for i in range(len(points[0])):
+                minus = 0
+                if last_i_chosen != -1:
+                    minus = abs(last_i_chosen - i)
+                best = max(
+                    max_score(row_i + 1, i) + (points[row_i][i] - minus),
+                    best)
+            
+            return best
+
+        return max_score(0, -1)

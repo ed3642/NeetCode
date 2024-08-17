@@ -9,6 +9,27 @@ class TreeNode:
         self.right = right
 
 class Solution:
+    # O(1) space
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        
+        def dfs(node):
+            nonlocal order_index, kth
+            if order_index >= k:
+                return
+
+            if node.left:
+                dfs(node.left)
+            if order_index < k:
+                kth = node.val
+                order_index += 1
+            if node.right:
+                dfs(node.right)
+        
+        order_index = 0
+        kth = None
+        dfs(root)
+        return kth
+
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         order = []
 

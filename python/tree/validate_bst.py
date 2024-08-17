@@ -9,6 +9,28 @@ class TreeNode:
         self.right = right
 
 class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        
+        def dfs(node):
+            nonlocal is_valid, prev
+            if is_valid == False:
+                return
+            if node.left:
+                dfs(node.left)
+            if prev != None and node.val <= prev:
+                is_valid = False
+                return
+            prev = node.val
+            if node.right:
+                dfs(node.right)
+            
+        if not root:
+            return True
+        is_valid = True
+        prev = None
+        dfs(root)
+        return is_valid
+
     # goes through entire tree
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         # traverse inorder and see if theres ever a node less than the prev one

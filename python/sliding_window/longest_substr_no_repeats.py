@@ -1,4 +1,21 @@
 class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if len(s) == 0:
+            return 0
+        
+        start = 0
+        longest = 1
+        in_window = set([s[0]])
+        
+        for end in range(1, len(s)):
+            while s[end] in in_window:
+                in_window.remove(s[start])
+                start += 1
+            in_window.add(s[end])
+            longest = max(end - start + 1, longest)
+        
+        return longest
+
     # sliding window with set
     # O(n)
     def lengthOfLongestSubstring(self, s: str) -> int:
@@ -21,9 +38,3 @@ class Solution:
                     l += 1
         
         return max(len(hs), max_length)
-    
-s = Solution()
-
-str = " "
-
-print(s.lengthOfLongestSubstring(str))
