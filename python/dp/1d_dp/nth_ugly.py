@@ -50,6 +50,4 @@ class Solution:
         
         return curr
     
-s = Solution()
-print(s.nthUglyNumber(n = 10))
         

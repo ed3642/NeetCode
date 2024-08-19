@@ -1,4 +1,19 @@
 class Solution:
+    def rob(self, nums: list[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+        
+        max_profit = nums
+        max_profit[1] = max(max_profit[0], max_profit[1])
+
+        for i in range(2, len(nums)):
+            max_profit[i] = max(
+                max_profit[i - 1],
+                max_profit[i - 2] + max_profit[i]
+            )
+        
+        return max_profit[-1]
+
     def robTopDown(self, nums: list[int]) -> int:
         if len(nums) == 1:
             return nums[0]
