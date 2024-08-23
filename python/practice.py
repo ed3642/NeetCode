@@ -1,42 +1,49 @@
-# https://leetcode.com/problems/2-keys-keyboard/
-from functools import lru_cache
+# https://leetcode.com/problems/top-k-frequent-elements/
+from collections import Counter
+import random
 
 class Solution:
-    # O(n) voodo solution
-    # problem transformed into finding all prime factors of n
-    def minSteps(self, n: int) -> int:
-        d = 2
-        operations = 0
-    
-        while n > 1:
-            # While d is a prime factor of n
-            while n % d == 0:
-                operations += d  # Add d to the operations count (d operations needed)
-                n //= d  # Remove the factor d from n
-            d += 1  # Increment d to check the next potential prime factor
-            # No composite number will divide n since all smaller prime factors have been removed
-    
-        return operations
-
-    def minSteps(self, n: int) -> int:
+    def topKFrequent(self, nums: list[int], k: int) -> list[int]:
         
-        # O(n^2)
-        @lru_cache(maxsize=None)
-        def min_ops(num, copied):
-            if num > n:
-                return float('inf')
-            if num == n:
-                return 0
-            
-            # only copy if we didnt copy last operation
-            if copied == num:
-                return min_ops(num + copied, copied) + 1 # paste
-            
-            return min(
-                min_ops(num, num), # copy
-                min_ops(num + copied, copied) # paste
-            ) + 1
+        # quick select on the frequencies
+        # want top-k freqs
 
-        if n == 1:
-            return 0
-        return min_ops(1, 1) + 1
+        def partition(l, r, arbitrary_i):
+            arbitrary_val = freqs[uniques[arbitrary_i]]
+
+            placer_i = l
+            for i in range(l, r):
+                curr_val = freqs[uniques[i]]
+                if curr_val < arbitrary_val:
+                    uniques[i], uniques[placer_i] = uniques[placer_i], uniques[i]
+                    placer_i += 1
+            
+            # put placer in the pivot position
+            uniques[r], uniques[placer_i] = uniques[placer_i], uniques[r]
+
+            return placer_i # the pivot
+                    
+
+        def quickselect(l, r):
+            # base case: 1 elem is always sorted
+            if l == r: 
+                return
+            # we can also do randint(l, r) but i dont see why it matters
+            arbitrary_i = r
+
+            pivot_i = partition(l, r, arbitrary_i)
+
+            if pivot_i == KTH_BIGGEST_INDEX:
+                return
+            elif pivot_i < KTH_BIGGEST_INDEX:
+                quickselect(pivot_i + 1, r)
+            else:
+                quickselect(l, pivot_i - 1)
+
+        freqs = Counter(nums)
+        uniques = list(freqs.keys())
+        N = len(uniques)
+        KTH_BIGGEST_INDEX = N - k
+        quickselect(0, N - 1)
+        
+        return uniques[KTH_BIGGEST_INDEX:]

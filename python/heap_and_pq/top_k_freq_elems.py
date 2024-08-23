@@ -1,7 +1,10 @@
+# https://leetcode.com/problems/top-k-frequent-elements
 import heapq
 from collections import Counter
 
 class Solution:
+    # there is an O(n) solution: quickselect
+    # quickselect can be used to solve top-k type problems instead of heap
     def topKFrequent(self, nums: list[int], k: int) -> list[int]:
         counter = Counter(nums)
 

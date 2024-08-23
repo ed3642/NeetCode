@@ -2,6 +2,33 @@
 class Solution:
     
     def jump(self, nums: list[int]) -> int:
+
+        N = len(nums)
+        if N == 1:
+            return 0
+        # edge case: first jump gets to end
+        if nums[0] >= N - 1:
+            return 1
+        best = nums[0]
+        jumps = 1
+
+        i = 0
+        while i < N:
+            reach = best
+            jumps += 1
+            while i <= reach:
+                cand = nums[i] + i
+                if cand >= N - 1:
+                    return jumps
+                if cand > best:
+                    best = cand
+                i += 1
+            i -= 1 # go back to last reachable pos
+        
+        return -1 # this should never happen
+    
+
+    def jump(self, nums: list[int]) -> int:
         # [2,3,1,1,4]
         # [2,4,3,4,8]
         if len(nums) == 1:

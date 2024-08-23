@@ -7,6 +7,56 @@ class ListNode:
         self.next = next
 
 class Solution:
+    
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        
+        carry = 0
+        dummyhead = ListNode()
+        node = dummyhead
+
+        while l1 and l2:
+            _sum = l1.val + l2.val + carry
+            if _sum > 9:
+                carry = 1
+                _sum %= 10
+            else:
+                carry = 0
+            l1.val = _sum
+            node.next = l1
+            node = node.next
+            l1 = l1.next
+            l2 = l2.next
+
+        # add the rest of the longer list
+        while l1:
+            _sum = l1.val + carry
+            if _sum > 9:
+                carry = 1
+                _sum %= 10
+            else:
+                carry = 0
+            l1.val = _sum
+            node.next = l1
+            node = node.next
+            l1 = l1.next
+        while l2:
+            _sum = l2.val + carry
+            if _sum > 9:
+                carry = 1
+                _sum %= 10
+            else:
+                carry = 0
+            l2.val = _sum
+            node.next = l2
+            node = node.next
+            l2 = l2.next
+        # add the carry if it exist
+        if carry == 1:
+            node.next = ListNode(val=carry)
+            node = node.next
+        
+        return dummyhead.next
+
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         # add numbers from l2 to l1 and carry over
         def add_carry_over(node, carry_over, prev):
