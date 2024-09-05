@@ -1,7 +1,27 @@
 from collections import defaultdict
+import heapq
+from typing import List
 
 class Solution:
     # https://leetcode.com/problems/reconstruct-itinerary/
+    # i think this is more efficient
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        
+        def dfs(node):
+            
+            while adj_list[node]:
+                nei = heapq.heappop(adj_list[node])
+                dfs(nei)
+            path.append(node)
+
+        adj_list = defaultdict(list)
+        for _from, _to in tickets:
+            heapq.heappush(adj_list[_from], _to)
+
+        path = []
+        dfs('JFK')
+        return reversed(path)
+
     def findItinerary(self, tickets: list[list[str]]) -> list[str]:
         # dfs variation (hierholzer algorithm)
         # eulerian path
