@@ -1,5 +1,4 @@
 # https://leetcode.com/problems/linked-list-in-binary-tree
-# https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string string matching prerequisite
 from typing import Optional
 
 class ListNode:
