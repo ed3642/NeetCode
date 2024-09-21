@@ -1,6 +1,8 @@
+# there is a way to do it in O(1) space recursively
 from typing import List
 
 class Solution:
+    # O(n) time O(lg n) space
     def lexicalOrder(self, n: int) -> List[int]:
         
         def dfs(prev, curr):
