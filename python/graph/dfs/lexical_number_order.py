@@ -16,6 +16,6 @@ class Solution:
         res = []
 
         for i in range(1, min(10, n + 1)):
-            dfs(str(i), '')
+            dfs('', str(i))
 
         return res
