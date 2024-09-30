@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/design-a-stack-with-increment-operation/
 class CustomStack:
     # O(1) all operations
     # lazy propagation of increments
