@@ -1,27 +1,29 @@
-class CustomStack:
-    # O(1) all operations
-    # lazy propagation of increments
-    def __init__(self, maxSize: int):
-        self.stack = []
-        self.increments = []
-        self.max_size = maxSize
+from collections import Counter
 
-    def push(self, x: int) -> None:
-        if len(self.stack) < self.max_size:
-            self.stack.append(x)
-            self.increments.append(0)
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        
+        countsA = Counter(s1)
+        countsB = Counter(s2)
 
-    def pop(self) -> int:
-        if len(self.stack) == 0:
-            return -1
-        inc = self.increments.pop()
-        total = self.stack.pop() + inc
-        # lazy inc propagation
-        if len(self.increments) > 0:
-            self.increments[-1] += inc
-        return total
-
-    def increment(self, k: int, val: int) -> None:
-        i = min(k, len(self.stack)) - 1
-        if i >= 0:
-            self.increments[i] += val
+        # check if its possible
+        for ch in countsA:
+            if countsA[ch] > countsB[ch]:
+                return False
+        
+        # check if it happens
+        N = len(s1)
+        curr_count = Counter(s2[:N])
+        if curr_count == countsA:
+            return True
+        for end in range(N, len(s2)):
+            ch_end = s2[end]
+            ch_start = s2[end - N]
+            curr_count[ch_end] += 1
+            curr_count[ch_start] -= 1
+            if curr_count[ch_start] == 0:
+                del curr_count[ch_start]
+            if curr_count == countsA:
+                return True
+        
+        return False
