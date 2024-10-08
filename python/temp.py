@@ -1,29 +1,31 @@
-from collections import Counter
-
+# https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-string-balanced/
 class Solution:
-    def checkInclusion(self, s1: str, s2: str) -> bool:
+    def minSwaps(self, s: str) -> int:
         
-        countsA = Counter(s1)
-        countsB = Counter(s2)
+        lefts = 0
+        mismatches = 0
+        for c in s:
+            if c == '[':
+                lefts += 1
+            else:
+                if lefts > 0:
+                    lefts -= 1
+                else:
+                    mismatches += 1
+        
+        return (mismatches + 1) // 2
 
-        # check if its possible
-        for ch in countsA:
-            if countsA[ch] > countsB[ch]:
-                return False
+    def minSwaps(self, s: str) -> int:
         
-        # check if it happens
-        N = len(s1)
-        curr_count = Counter(s2[:N])
-        if curr_count == countsA:
-            return True
-        for end in range(N, len(s2)):
-            ch_end = s2[end]
-            ch_start = s2[end - N]
-            curr_count[ch_end] += 1
-            curr_count[ch_start] -= 1
-            if curr_count[ch_start] == 0:
-                del curr_count[ch_start]
-            if curr_count == countsA:
-                return True
+        lefts = 0
+        rights = 0
+        mismatches = 0
+        for c in s:
+            if c == ']':
+                rights += 1
+            elif c == '[':
+                lefts += 1
+            if rights > lefts:
+                mismatches = max(rights - lefts, mismatches)
         
-        return False
+        return mismatches // 2 if mismatches % 2 == 0 else mismatches // 2 + 1
