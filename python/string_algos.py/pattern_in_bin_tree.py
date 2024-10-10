@@ -12,7 +12,7 @@ class TreeNode:
         self.right = right
 
 class Solution:
-    # TODO: solve with kmp string matching
+    # with kmp string matching
     # O(n)
     def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
 
