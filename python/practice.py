@@ -1,35 +1,37 @@
-# https://leetcode.com/problems/the-number-of-the-smallest-unoccupied-chair
-import heapq
+# https://leetcode.com/problems/critical-connections-in-a-network/description/
+
 from typing import List
 
 class Solution:
-    def smallestChair(self, times: List[List[int]], targetFriend: int) -> int:
-        
-        LEAVE = 0
-        ENTER = 1
-        events = []
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
 
-        for i, (ti, tf) in enumerate(times):
-            events.append((ti, ENTER, i))
-            events.append((tf, LEAVE, i))
+        def dfs(node):
+            nonlocal curr_time
+            times[node] = curr_time
+            low_links[node] = curr_time
+            curr_time += 1
 
-        events.sort(key=lambda x: (x[0], x[1]))
+            for nei in adj_list[node]:
+                if times[nei] == UNSET:
+                    parents[nei] = node
+                    dfs(nei)
+                    if low_links[nei] > times[node]:
+                        critical_edges.append((nei, node))
+                if nei != parents[node]:
+                    low_links[node] = min(low_links[nei], low_links[node])
+
+        adj_list = [[] for _ in range(n)]
+        for _from, _to in connections:
+            adj_list[_from].append(_to)
+            adj_list[_to].append(_from)
         
-        last_seat = 0
-        earliest_seat = [] # min heap
-        seats = {}
-        for _, type, i in events:
-            if type == ENTER:
-                assigned_seat = -1
-                if earliest_seat:
-                    assigned_seat = heapq.heappop(earliest_seat)
-                else:
-                    assigned_seat = last_seat
-                    last_seat += 1
-                if i == targetFriend:
-                    return assigned_seat
-                seats[i] = assigned_seat
-            elif type == LEAVE:
-                heapq.heappush(earliest_seat, seats[i])
-        
-        return -1
+        UNSET = -1
+        times = [UNSET] * n
+        low_links = [UNSET] * n
+        parents = [None] * n
+        critical_edges = []
+        curr_time = 0
+
+        dfs(0)
+        return critical_edges
+
