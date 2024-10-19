@@ -2,6 +2,24 @@
 class Solution:
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
         
+        def backtrack(start, builder: list, target):
+            if target < 0:
+                return
+            if target == 0:
+                res.append(builder.copy())
+                return
+
+            for i in range(start, len(candidates)):
+                builder.append(candidates[i])
+                backtrack(i, builder, target - candidates[i])
+                builder.pop()
+
+        res = []
+        backtrack(0, [], target)
+        return res
+
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        
         def backtrack(start, builder: list, curr_sum):
             if curr_sum > target:
                 return 
