@@ -1,82 +1,70 @@
-# https://leetcode.com/problems/kth-largest-sum-in-a-binary-tree/
-# Definition for a binary tree node.
-from collections import deque
-from typing import Optional
+# https://leetcode.com/problems/find-kth-largest-xor-coordinate-value/
+from typing import List
 import heapq
 
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
 class Solution:
-    def kthLargestLevelSum(self, root: Optional[TreeNode], k: int) -> int:
+    def kthLargestValue(self, matrix: List[List[int]], k: int) -> int:
+            
+        # propagate xor
+        heap = []
+        MAX_I = len(matrix)
+        MAX_J = len(matrix[0])
+        xor_matrix = [[0] * MAX_J for _ in range(MAX_I)]
+        for i in range(MAX_I):
+            for j in range(MAX_J):
+                above_val = xor_matrix[i-1][j] if i > 0 else 0
+                left_val = xor_matrix[i][j-1] if j > 0 else 0
+                diag_val = xor_matrix[i-1][j-1] if i > 0 and j > 0 else 0
+                xor_matrix[i][j] = matrix[i][j] ^ above_val ^ left_val ^ diag_val
+                if len(heap) < k:
+                    heapq.heappush(heap, xor_matrix[i][j])
+                elif heap[0] < xor_matrix[i][j]:
+                    heapq.heapreplace(heap, xor_matrix[i][j])
 
-        def partition(l, r, arbitrary_i):
+        # find kth biggest
+        return heap[0]
+    
+    def kthLargestValue(self, matrix: List[List[int]], k: int) -> int:
+        # quickselect performs poorly with losts of repeating values, hence this TLEs
+        def partition(l, r):
+            pivot = values[r]
             placer_i = l
             for i in range(l, r):
-                if level_sums[i] < level_sums[arbitrary_i]:
-                    level_sums[i], level_sums[placer_i] = level_sums[placer_i], level_sums[i]
+                if values[i] < pivot:
+                    values[i], values[placer_i] = values[placer_i], values[i]
                     placer_i += 1
-            level_sums[r], level_sums[placer_i] = level_sums[placer_i], level_sums[r]
+            values[r], values[placer_i] = values[placer_i], values[r]
             return placer_i
 
         def quickselect(l, r):
-            nonlocal KTH_BIGGEST_I
-            if l == r: return
-
-            pivot_i = partition(l, r, r)
-
-            if KTH_BIGGEST_I < pivot_i:
-                quickselect(l, pivot_i - 1)
-            elif KTH_BIGGEST_I > pivot_i:
-                quickselect(pivot_i + 1, r)
-            else:
+            nonlocal KTH_BIGGEST_INDEX
+            if not (l < r):
                 return
+            
+            pivot_i = partition(l, r)
 
-        q = deque([root])
-        level_sums = []
-        while q:
-            _sum = 0
-            for _ in range(len(q)):
-                node = q.popleft()
-                _sum += node.val
-                if node.left:
-                    q.append(node.left)
-                if node.right:
-                    q.append(node.right)
-            level_sums.append(_sum)
+            if KTH_BIGGEST_INDEX < pivot_i:
+                quickselect(l, pivot_i - 1)
+            elif KTH_BIGGEST_INDEX > pivot_i:
+                quickselect(pivot_i + 1, r)
+            
+        # propagate xor
+        values = []
+        MAX_I = len(matrix)
+        MAX_J = len(matrix[0])
+        xor_matrix = [[0] * MAX_J for _ in range(MAX_I)]
+        for i in range(MAX_I):
+            for j in range(MAX_J):
+                above_val = xor_matrix[i-1][j] if i > 0 else 0
+                left_val = xor_matrix[i][j-1] if j > 0 else 0
+                diag_val = xor_matrix[i-1][j-1] if i > 0 and j > 0 else 0
+                xor_matrix[i][j] = matrix[i][j] ^ above_val ^ left_val ^ diag_val
+                values.append(xor_matrix[i][j])
 
-        N = len(level_sums)
-        if N < k:
-            return -1
-        KTH_BIGGEST_I = N - k
+
+        # find kth biggest
+        N = MAX_I * MAX_J
+        KTH_BIGGEST_INDEX = N - k
         quickselect(0, N - 1)
-        return level_sums[KTH_BIGGEST_I]
-
-    # O(n log n)
-    def kthLargestLevelSum(self, root: Optional[TreeNode], k: int) -> int:
-        
-        q = deque([root])
-        level_sums_h = []
-        num_levels = 0
-        while q:
-            _sum = 0
-            for _ in range(len(q)):
-                node = q.popleft()
-                _sum += node.val
-                if node.left:
-                    q.append(node.left)
-                if node.right:
-                    q.append(node.right)
-            if len(level_sums_h) == k:
-                if level_sums_h[0] < _sum:
-                    heapq.heapreplace(level_sums_h, _sum)
-            else:
-                heapq.heappush(level_sums_h, _sum)
-            num_levels += 1
-
-        if num_levels < k:
-            return -1
-        return level_sums_h[0]
+        return values[KTH_BIGGEST_INDEX]
+    
