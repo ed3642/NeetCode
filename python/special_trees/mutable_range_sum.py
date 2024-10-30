@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/range-sum-query-mutable/description/
 class NumArray:
-
+    # fenwich tree bst
     def __init__(self, nums: list[int]):
         self.size = len(nums)
         self.tree = [0] * (self.size + 1)

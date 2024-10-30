@@ -1,21 +1,31 @@
 from typing import List
 
 class Solution:
-    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
         
-        def backtrack(start, builder, _sum):
-            if _sum > n:
-                return
-            if len(builder) > k:
-                return
-            if _sum == n and len(builder) == k:
-                res.append(builder.copy())
+        def dfs(node):
+            if node_state[node] != UNVISITED:
+                return node_state[node] == SAFE
             
-            for i in range(start, 10):
-                builder.append(i)
-                backtrack(i + 1, builder, _sum + i)
-                builder.pop()
+            node_state[node] = INSTACK
+            
+            for nei in graph[node]:
+                if not dfs(nei):
+                    return False
+            
+            node_state[node] = SAFE
+            return True
+        
+        N = len(graph)
+        UNVISITED = 0
+        INSTACK = 1
+        SAFE = 2
+        node_state = [UNVISITED] * N
+        safe_nodes = []
 
-        res = []
-        backtrack(1, [], 0)
-        return res
+        for node in range(N):
+            if dfs(node):
+                safe_nodes.append(node)
+        
+        return safe_nodes
+
