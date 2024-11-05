@@ -1,42 +1,37 @@
-# https://leetcode.com/problems/shortest-path-with-alternating-colors
+# https://leetcode.com/problems/nearest-exit-from-entrance-in-maze
 from collections import deque
 from typing import List
 
 class Solution:
-
-    def shortestAlternatingPaths(self, n: int, redEdges: List[List[int]], blueEdges: List[List[int]]) -> List[int]:
+    def nearestExit(self, maze: List[List[str]], entrance: List[int]) -> int:
         
-        # SPFA considering starting with red and blue 
-        RED = 0
-        BLUE = 1
-        adj_list = [[] for _ in range(n)]
-        distances = [[float('inf') for _ in range(2)] for _ in range(n)] # stores [red start, blue start]
-        distances[0] = [0, 0]
+        def is_in_maze(i, j):
+            return (i >= 0 and i < MAX_I and
+                    j >= 0 and j < MAX_J)
 
-        for _from, _to in redEdges:
-            adj_list[_from].append((_to, RED)) # append <nei, type>
-        for _from, _to in blueEdges:
-            adj_list[_from].append((_to, BLUE))
-        
-        # consider both starting types
-        q = deque([(0, RED, 0), (0, BLUE, 0)]) # <dist, prev_type, node>
+        MAX_I = len(maze)
+        MAX_J = len(maze[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        entrance_i, entrance_j = entrance 
+        q = deque([(entrance_i, entrance_j)]) # dist, i, j
 
+        dist = 0
         while q:
-            dist, prev_type, node = q.popleft()
+            for _ in range(len(q)):
+                i, j = q.popleft()
 
-            for nei_node, nei_type in adj_list[node]:
-                if prev_type != nei_type:
-                    cand_dist = dist + 1
-                    if cand_dist < distances[nei_node][nei_type]:
-                        distances[nei_node][nei_type] = cand_dist
-                        q.append((cand_dist, nei_type, nei_node))
-
-        # format res
-        res = [-1] * n
-        for node, dist in enumerate(distances):
-            red_d, blue_d = dist
-            best = min(red_d, blue_d)
-            if best != float('inf'):
-                res[node] = best
-
-        return res
+                for d_i, d_j in directions:
+                    n_i = i + d_i
+                    n_j = j + d_j
+                    # escaped
+                    in_maze = False
+                    if is_in_maze(n_i, n_j): 
+                        in_maze = True
+                    if not in_maze and not (i == entrance_i and j == entrance_j):
+                        return dist
+                    if in_maze and maze[n_i][n_j] == '.':
+                        maze[n_i][n_j] = '+'
+                        q.append((n_i, n_j))
+            dist += 1
+        
+        return -1

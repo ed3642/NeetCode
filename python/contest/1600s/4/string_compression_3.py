@@ -1,5 +1,25 @@
 class Solution:
     def compressedString(self, word: str) -> str:
+        
+        res = []
+        streak = 0
+        for i in range(1, len(word)):
+            streak += 1 
+            if word[i] == word[i - 1]:
+                if streak == 9:
+                    res.append(str(streak))
+                    res.append(word[i])
+                    streak = 0
+            else:
+                res.append(str(streak))
+                res.append(word[i - 1])
+                streak = 0
+        res.append(str(streak + 1))
+        res.append(word[-1])
+
+        return ''.join(res)
+
+    def compressedString(self, word: str) -> str:
 
         def add_compression(count, ch):
             repeat = count // 9
