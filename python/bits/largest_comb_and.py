@@ -2,15 +2,7 @@
 from typing import List
 
 class Solution:
-    def largestCombination(self, candidates: List[int]) -> int:
-        groups = [0] * 24
-        for num in candidates:
-            for i in range(24):
-                if (num & (1 << i) != 0):
-                    groups[i] += 1
-
-        return max(groups)
-    
+    # O(n * 24) = O(n), performs a bit better since the average bit length is smaller than 24
     def largestCombination(self, candidates: List[int]) -> int:
         # 100110001001011010000000, 24 bits max
         N = len(candidates)
@@ -22,6 +14,16 @@ class Solution:
             for i, bit in enumerate(bits):
                 if bit == '1':
                     groups[length - i - 1] += 1
+
+        return max(groups)
+    
+    # O(n * 24) = O(n)
+    def largestCombination(self, candidates: List[int]) -> int:
+        groups = [0] * 24
+        for num in candidates:
+            for i in range(24):
+                if (num & (1 << i) != 0):
+                    groups[i] += 1
 
         return max(groups)
     
