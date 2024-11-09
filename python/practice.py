@@ -1,49 +1,31 @@
-# https://leetcode.com/problems/shortest-path-in-binary-matrix
-from collections import defaultdict
-import heapq
+# https://leetcode.com/problems/course-schedule/
+from collections import deque
 from typing import List
 
 class Solution:
-    # we can do A* since we know the start and end nodes
-    def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
-        # f = g + h
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
 
-        def is_valid(i, j):
-            return (i >= 0 and i < MAX_I and
-                    j >= 0 and j < MAX_J and
-                    grid[i][j] == 0)
+        in_degrees = [0] * numCourses
+        q = deque()
+        courses_sorted = 0
+        adj_list = [[] for _ in range(numCourses)]
 
-        # cherbyshev
-        def heuristic(i, j):
-            return max(abs((MAX_I - 1) - i), abs((MAX_J - 1) - j))
+        for _from, _to in prerequisites:
+            adj_list[_from].append(_to)
+            in_degrees[_to] += 1
         
-        if grid[0][0] == 1:
-            return -1
+        for course, count in enumerate(in_degrees):
+            if count == 0:
+                q.append(course)
+                courses_sorted += 1
+        
+        while q:
+            course = q.popleft()
 
-        MAX_I = len(grid)
-        MAX_J = len(grid[0])
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
-        distances = defaultdict(lambda: float('inf'))
-        distances[(0, 0)] = 1 # we count the starting node in this problem
-        starting_prio = distances[(0, 0)] + heuristic(0, 0)
-        heap = [(starting_prio, 0, 0)]
-
-        while heap:
-            prio, i, j = heapq.heappop(heap)
-
-            grid[i][j] == 1 # mark visited
-
-            if i == MAX_I - 1 and j == MAX_J - 1:
-                return distances[(i, j)]
-
-            for d_i, d_j in directions:
-                n_i = i + d_i
-                n_j = j + d_j
-                if is_valid(n_i, n_j):
-                    cand_g = distances[(i, j)] + 1
-                    if cand_g < distances[(n_i, n_j)]:
-                        distances[(n_i, n_j)] = cand_g
-                        f = cand_g + heuristic(n_i, n_j)
-                        heapq.heappush(heap, (f, n_i, n_j))
-
-        return -1
+            for nei in adj_list[course]:
+                in_degrees[nei] -= 1
+                if in_degrees[nei] == 0:
+                    courses_sorted += 1
+                    q.append(nei)
+        
+        return numCourses == courses_sorted
