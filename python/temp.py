@@ -1,27 +1,35 @@
-# https://leetcode.com/problems/largest-combination-with-bitwise-and-greater-than-zero
 from typing import List
 
 class Solution:
-    def largestCombination(self, candidates: List[int]) -> int:
-        groups = [0] * 24
-        for num in candidates:
-            for i in range(24):
-                if (num & (1 << i) != 0):
-                    groups[i] += 1
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
+        
+        def dfs(node):
+            nonlocal time
+            times[node] = time
+            lowlinks[node] = time
+            time += 1
 
-        return max(groups)
-    
-    def largestCombination(self, candidates: List[int]) -> int:
-        # 100110001001011010000000, 24 bits max
-        N = len(candidates)
-        groups = [0] * 24
-        for i in range(N):
-            candidates[i] = bin(candidates[i])[2:]
-            bits = candidates[i]
-            length = len(bits)
-            for i, bit in enumerate(bits):
-                if bit == '1':
-                    groups[length - i - 1] += 1
+            for nei in adj_list[node]:
+                if times[nei] == UNVISITED:
+                    parents[nei] = node
+                    dfs(nei)
+                    if lowlinks[nei] > times[node]:
+                        critical_edges.append((node, nei))
+                if nei != parents[node]:
+                    lowlinks[node] = min(lowlinks[nei], lowlinks[node])
 
-        return max(groups)
-    
+        UNVISITED = -1
+        time = 0
+        times = [UNVISITED] * n
+        lowlinks = [UNVISITED] * n
+        parents = [UNVISITED] * n
+        adj_list = [[] for _ in range(n)]
+        critical_edges = []
+
+        for _from, _to in connections:
+            adj_list[_from].append(_to)
+            adj_list[_to].append(_from)
+        
+        dfs(0)
+
+        return critical_edges

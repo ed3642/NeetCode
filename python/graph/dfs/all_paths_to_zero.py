@@ -1,7 +1,36 @@
-from collections import defaultdict
+# https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero
+from typing import List
 
 class Solution:
-    # https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/description/
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+        
+        # its a tree.
+        
+        def dfs(node):
+            nonlocal flips 
+
+            visited[node] = True
+
+            for nei, type in adj_list[node]:
+                if not visited[nei]:
+                    if type == ORIGINAL:
+                        flips += 1
+                    dfs(nei)
+
+        ORIGINAL = 0
+        REVERSED = 1
+        adj_list = [[] for _ in range(n)]
+        for _from, _to in connections:
+            adj_list[_from].append((_to, ORIGINAL))
+            adj_list[_to].append((_from, REVERSED))
+        
+        visited = [False] * n
+        flips = 0
+        
+        dfs(0)
+
+        return flips
+
     def minReorder(self, n: int, connections: list[list[int]]) -> int:
         # tree structure
         # all cities are connected by 1 or 2 single direction edge
