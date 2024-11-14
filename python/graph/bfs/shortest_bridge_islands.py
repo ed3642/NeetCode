@@ -3,6 +3,7 @@ from collections import deque
 from typing import List
 
 class Solution:
+    # nice use of multi start bfs
     def shortestBridge(self, grid: List[List[int]]) -> int:
         
         def dfs(i, j):
