@@ -17,6 +17,7 @@ class Solution:
             for j in range(len(matrix[0])):
                 num = matrix[i][j]
                 mag = abs(num)
+                print(mag)
                 least_magnitude = min(mag, least_magnitude)
                 if num < 0:
                     num_negatives += 1
