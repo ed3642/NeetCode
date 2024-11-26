@@ -10,21 +10,23 @@ class Solution:
         # no matter where 2 negatives are placed, we can always cancel them out
 
         _sum = 0
-        num_negatives = 0
+        negative_parity = 0
         least_magnitude = float('inf')
 
         for i in range(len(matrix)):
             for j in range(len(matrix[0])):
                 num = matrix[i][j]
-                mag = abs(num)
-                print(mag)
-                least_magnitude = min(mag, least_magnitude)
                 if num < 0:
-                    num_negatives += 1
-                _sum += mag
+                    abs_num = -num
+                    least_magnitude = min(abs_num, least_magnitude)
+                    _sum += abs_num
+                    negative_parity ^= 1
+                else:
+                    least_magnitude = min(num, least_magnitude)
+                    _sum += num
 
         # odd negative one out
-        if num_negatives % 2 != 0:
+        if negative_parity == 1:
             _sum -= least_magnitude * 2
 
         return _sum

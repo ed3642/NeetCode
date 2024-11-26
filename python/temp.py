@@ -1,30 +1,56 @@
-# https://leetcode.com/problems/maximum-matrix-sum
+# https://leetcode.com/problems/find-champion-ii/
+from collections import deque
 from typing import List
 
 class Solution:
-    def maxMatrixSum(self, matrix: List[List[int]]) -> int:
+    def findChampion(self, n: int, edges: List[List[int]]) -> int:
         
-        # minimize the num of negatives
-        # prio the largest neg nums to turn positive
-        # can only cancel out a neg when there are 2 negs
-        # no matter where 2 negatives are placed, we can always cancel them out
+        # Topological sort, must be 1 starting 0-degree node
+        # notice we dont need to do the full sort just the set up
 
-        _sum = 0
-        num_negatives = 0
-        least_magnitude = float('inf')
+        in_degree = [0] * n
 
-        for i in range(len(matrix)):
-            for j in range(len(matrix[0])):
-                num = matrix[i][j]
-                mag = abs(num)
-                least_magnitude = min(mag, least_magnitude)
-                if num < 0:
-                    num_negatives += 1
-                _sum += mag
+        for _from, _to in edges:
+            in_degree[_to] += 1
+        
+        expected_winner = -1
+        for node, degree in enumerate(in_degree):
+            if degree == 0:
+                if expected_winner != -1:
+                    return -1
+                else:
+                    expected_winner = node
+        
+        return expected_winner 
 
-        # odd negative one out
-        if num_negatives % 2 != 0:
-            _sum -= least_magnitude * 2
+    def findChampion(self, n: int, edges: List[List[int]]) -> int:
+        
+        # Topological sort, must be 1 starting 0-degree node
 
-        return _sum
-    
+        in_degree = [0] * n
+        adj_list = [[] for _ in range(n)]
+
+        for _from, _to in edges:
+            in_degree[_to] += 1
+            adj_list[_from].append(_to)
+        
+        q = deque()
+        expected_winner = -1
+        for node, degree in enumerate(in_degree):
+            if degree == 0:
+                q.append(node)
+                if len(q) > 1:
+                    return -1
+                else:
+                    expected_winner = node
+        
+        while q:
+            for _ in range(len(q)):
+                node = q.popleft()
+
+                for nei in adj_list[node]:
+                    in_degree[nei] -= 1
+                    if in_degree[nei] == 0:
+                        q.append(nei)
+        
+        return expected_winner if len(q) == 0 else -1
