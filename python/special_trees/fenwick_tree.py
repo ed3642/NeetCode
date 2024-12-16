@@ -1,7 +1,10 @@
 class FenwickTree:
+    # NOTE: fenwick trees can only handle operations that are invertible (+, -, *, /, XOR, etc)
+    # for nonreversible operations use segment tree
+    
     # 1 based indexing, 0th elem is ignored
     # inclusive ranges
-    # useful for freq range queries
+    # useful for freq range queries with updates
     def __init__(self, size): # size is max(nums) + 1
         self.size = size
         self.tree = [0] * (size + 1)

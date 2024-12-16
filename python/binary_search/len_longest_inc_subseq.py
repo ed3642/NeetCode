@@ -1,7 +1,8 @@
 # https://leetcode.com/problems/longest-increasing-subsequence
 class Solution:
     def lengthOfLIS(self, nums: list[int]) -> int:
-        # rare case were building the seq is faster than just counting how long it is
+        # This doesnt build the Actual LLS
+        # but it keeps the relative values in order where the seq generated will have the same length as the actual LLS
         
         def bisect_left(arr, item):
             l = 0
@@ -24,3 +25,6 @@ class Solution:
                 seq[insert_index] = num
     
         return len(seq)
+    
+s = Solution()
+print(s.lengthOfLIS([10,9,2,5,3,7,101,18,4]))
