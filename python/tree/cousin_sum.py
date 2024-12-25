@@ -12,7 +12,7 @@ class TreeNode:
 class Solution:
     def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         
-        # i is the pfs_index
+        # i is the pfs_index, prefixsum
         def calc_val(pfs, i):
             if i % 2 == 0:
                 left = pfs[i - 2] # skip sibling to left
