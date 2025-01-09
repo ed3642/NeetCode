@@ -1,33 +1,32 @@
+# https://leetcode.com/problems/min-stack
 class MinStack:
-    # normal stack but it keeps track of the minimum value to return in O(1)
 
     def __init__(self):
-        self.values = []
-        self.min_vals = []
+        self.stack = []
+        self.min_mono_stack = []
 
     def push(self, val: int) -> None:
-        if self.min_vals:
-            self.min_vals.append(min(val, self.getMin()))
-        else:
-            self.min_vals.append(val)
-        self.values.append(val)
+        self.stack.append(val)
+        if not self.min_mono_stack or val <= self.min_mono_stack[-1]:
+            self.min_mono_stack.append(val)
 
     def pop(self) -> None:
-        self.min_vals.pop()
-        self.values.pop()
+        popped = self.stack.pop()
+        if self.min_mono_stack and popped == self.min_mono_stack[-1]:
+            self.min_mono_stack.pop()
 
     def top(self) -> int:
-        return self.values[-1]
+        return self.stack[-1]
 
     def getMin(self) -> int:
-        return self.min_vals[-1]
+        return self.min_mono_stack[-1]
 
 
 # Your MinStack object will be instantiated and called as such:
-obj = MinStack()
-obj.push(-10)
-obj.push(14)
-obj.push(-20)
-print(obj.top())
-obj.pop()
-print(obj.getMin())
+# obj = MinStack()
+# obj.push(-2)
+# obj.push(0)
+# obj.push(-3)
+# param_4 = obj.getMin()
+# obj.pop()
+# param_3 = obj.top()

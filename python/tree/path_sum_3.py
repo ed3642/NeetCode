@@ -1,7 +1,7 @@
-# Definition for a binary tree node.
 from collections import defaultdict
 from typing import Optional
 
+# Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -9,34 +9,33 @@ class TreeNode:
         self.right = right
         
 class Solution:
-
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
-        # store cumulative sum in dict and see how many times this sum has occured so far
-        # this is like prefix sum questions but with a binary tree we have to backtrack the prefix sums when processing another branch of the tree
+        
+        # get running sum
+        # post order traversal to look for needed children
 
-        def dfs(node, total):
+        def post_order(node, _sum):
+            nonlocal count
             if not node:
-                return 0
-            
-            total += node.val
-            
-            # path sum starts at the root
-            if total == targetSum:
-                self.count += 1
-            
-            # path sum starts somewhere in the middle
-            need = total - targetSum # some path in the tree whos sum is targetSum
-            if need in prefix_sum:
-                self.count += prefix_sum[need]
+                return
 
-            prefix_sum[total] += 1
-            dfs(node.left, total)
-            dfs(node.right, total)
-            prefix_sum[total] -= 1
+            need = _sum - targetSum
+            count += sum_count[need]
 
-        prefix_sum = defaultdict(int) # <sum, freq>
-        prefix_sum[0] = 1 # root node to its self
-        self.count = 0
-        dfs(root, 0)
+            sum_count[_sum] += 1
+            if node.left:
+                post_order(node.left, _sum + node.left.val)
+            if node.right:
+                post_order(node.right, _sum + node.right.val)
+            sum_count[_sum] -= 1
 
-        return self.count
+        if not root:
+            return 0
+        # check valid paths
+        count = 0
+        sum_count = defaultdict(int)
+        sum_count[0] = 1
+        post_order(root, root.val)
+        
+        return count
+    

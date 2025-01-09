@@ -1,6 +1,33 @@
+# https://leetcode.com/problems/partition-equal-subset-sum
 from functools import lru_cache
+from typing import List
 
 class Solution:
+    # O(n * half), (n + 1) * (half + 1) states and each states does O(1)
+    def canPartition(self, nums: List[int]) -> bool:
+        
+        @lru_cache(maxsize=None)
+        def can_split(i, _sum):
+            nonlocal half
+
+            if i >= len(nums):
+                if _sum == half:
+                    return True
+                return False
+            if _sum > half:
+                return False
+            if _sum == half:
+                return True
+
+            return can_split(i + 1, _sum + nums[i]) or can_split(i + 1, _sum)
+
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+        half = total // 2
+
+        return can_split(0, 0)
+    
     # first time i see the topdown solution be faster than the bottom up
     def canPartition(self, nums: list[int]) -> bool:
         

@@ -1,8 +1,31 @@
 from functools import lru_cache
+from typing import List
 
 class Solution:
-
     # most intuitive
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        
+        @lru_cache(maxsize=None)
+        def can_build(start):
+            if start == len(s):
+                return True
+            
+            found = False
+            for word in words:
+                next_i = start + len(word)
+                if next_i > len(s):
+                    continue
+                if s[start:next_i] in words:
+                    res = can_build(next_i)
+                    if res:
+                        return True
+                    found &= res
+            return found
+
+        words = set(wordDict)
+
+        return can_build(0)
+
     def wordBreak(self, s: str, wordDict: list[str]) -> bool:
 
         @lru_cache(maxsize=None)

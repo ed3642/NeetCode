@@ -1,3 +1,5 @@
+# https://leetcode.com/problems/n-queens-ii
+
 class Solution:
     # uses a grid to keep track of valid squares, is slower than using sets
     def totalNQueens(self, n: int) -> int:
