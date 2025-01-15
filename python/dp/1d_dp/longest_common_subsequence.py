@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+# bottom up solutions are 2x faster for this problem
 class Solution:
     # space optimized, nice solution
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
@@ -60,6 +61,36 @@ class Solution:
 
         return dp[0][0]
     
+    # best top down solution i have
+    # O(n * m)
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        
+        @lru_cache(maxsize=None)
+        def LCS(i1, i2):
+            if i1 >= len(text1) or i2 >= len(text2):
+                return 0
+
+            # didnt find a match
+            if text2[i2] not in next_char_i[i1]:
+                return LCS(i1, i2 + 1)
+            looking_for_i = next_char_i[i1][text2[i2]]
+
+            return max(
+                LCS(looking_for_i + 1, i2 + 1) + 1,
+                LCS(i1, i2 + 1)
+            )
+
+        if len(text1) < len(text2):
+            text1, text2 = text2, text1
+
+        next_char_i = [0] * len(text1)
+        char_i_state = {}
+        for i in range(len(text1) - 1, -1, -1):
+            char_i_state[text1[i]] = i
+            next_char_i[i] = char_i_state.copy()
+        
+        return LCS(0, 0)
+    
     # O (m n)
     def longestCommonSubsequence3(self, text1: str, text2: str) -> int:
         # look at the first characters
@@ -79,6 +110,7 @@ class Solution:
             return max(dp(i, j + 1), dp(i + 1, j))
         
         return dp(0, 0)
+    
 
     # O (m n^2)
     def longestCommonSubsequence3(self, text1: str, text2: str) -> int:
@@ -102,4 +134,5 @@ class Solution:
             return max(case1, case2)
         
         return dp(0, 0)
+    
 

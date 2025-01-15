@@ -1,39 +1,33 @@
-from collections import deque
+# https://leetcode.com/problems/daily-temperatures
+from typing import List
 
 class Solution:
 
-    def dailyTemperatures(self, temperatures: list[int]) -> list[int]:
-        
-        stack = [] # mono dec stack from left
-        res = [0] * len(temperatures)
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        # dont have to store the temp just the index
 
-        for i in range(len(temperatures) - 1, -1, -1):
-            temp = temperatures[i]
+        N = len(temperatures)
+        res = [0] * N
+        stack = []
 
-            while stack and temp >= temperatures[stack[-1]]:
-                stack.pop()
-            # record days until next warmer
-            if stack:
-                res[i] = stack[-1] - i
-
-            stack.append(i)
-
-        return res
-
-    # monotonic decreasing stack from left to right
-    def dailyTemperatures2(self, temperatures: list[int]) -> list[int]:
-        n = len(temperatures)
-        stack = deque()
-        res = [0] * n
-        i = 0
-
-        while i < n:
-            while stack and temperatures[i] > temperatures[stack[-1]]:
+        for i, temp in enumerate(temperatures):
+            while stack and temperatures[stack[-1]] < temp:
                 prev_i = stack.pop()
                 res[prev_i] = i - prev_i
             stack.append(i)
-            i += 1
 
         return res
     
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        
+        N = len(temperatures)
+        res = [0] * N
+        stack = []
 
+        for i, temp in enumerate(temperatures):
+            while stack and stack[-1][1] < temp:
+                prev_i, t = stack.pop()
+                res[prev_i] = i - prev_i
+            stack.append((i, temp))
+
+        return res

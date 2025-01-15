@@ -1,54 +1,38 @@
-# https://leetcode.com/problems/remove-nth-node-from-end-of-list
-from typing import Optional
-
-# Definition for singly-linked list.
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
+# https://leetcode.com/problems/minimum-window-substring
+from collections import Counter, defaultdict
 
 class Solution:
-
-    # one pass, O(n) space
-    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+    def minWindow(self, s: str, t: str) -> str:
         
-        index_to_node = []
+        N = len(s)
+        target_counts = Counter(t)
+        counts = defaultdict(int)
+        need = len(t)
+        shortest_str = ''
 
-        node = head
-        while node:
-            index_to_node.append(node)
-            node = node.next
+        l = 0
+        for r in range(N):
+            # remove the first char that in needed in the window
+            while l < r and need == 0:
+                if counts[s[l]] == target_counts[s[l]]:
+                    need += 1
+                counts[s[l]] -= 1
+                l += 1
 
-        size = len(index_to_node)
-        to_remove_i = size - n
-        node = index_to_node[to_remove_i]
-        if to_remove_i > 0:
-            prev = index_to_node[to_remove_i - 1]
-            next = node.next
-            prev.next = next
-        else:
-            # remove just the first node
-            return head.next
+            # keep track of the counts
+            if counts[s[r]] < target_counts[s[r]]:
+                need -= 1
+            counts[s[r]] += 1
 
-        return head
-    
-    # 2 passes but O(1) space
-    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        # 
-        node = head
-        for i in range(n):
-            node = node.next
+            # shrink windown as much as possible
+            while l < r and need == 0:
+                if counts[s[l]] == target_counts[s[l]]:
+                    break # dont remove any that we need
+                counts[s[l]] -= 1
+                l += 1
 
-        prev = None
-        delayed = head
-        while node:
-            node = node.next
-            prev = delayed
-            delayed = delayed.next
-
-        if prev:
-            prev.next = delayed.next
-        else:
-            # remove just the first node
-            return head.next
-        return head
+            if need == 0:
+                if shortest_str == '' or r - l + 1 < len(shortest_str):
+                    shortest_str = s[l:r + 1]
+            
+        return shortest_str
