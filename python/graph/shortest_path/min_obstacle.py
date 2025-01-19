@@ -11,6 +11,7 @@ class Solution:
         # BFS from top left to bot right
         # walls cost 1 and empty cost 0
         # approach referred to as 0-1 BFS or prioritized BFS 
+        # NOTE: unlike https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/ this problem doesnt need a costs array since each cell only has 2 states, once we make a decision on a cells state its the optimal one
 
         def is_in_bounds(i, j):
             return 0 <= i < I_BOUNDARY and 0 <= j < J_BOUNDARY

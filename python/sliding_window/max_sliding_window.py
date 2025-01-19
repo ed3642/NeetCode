@@ -1,7 +1,69 @@
-from collections import deque
+from collections import defaultdict, deque
 import heapq
+from typing import List
 
 class Solution:
+
+    # O(n) best, can also use this logic for min in window
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        # mono dec q to keep track of max in window, popleft index that are out of bounds
+
+        def add_next(i):
+            while q and nums[q[-1]] <= nums[i]:
+                q.pop()
+            q.append(i)
+
+        def remove_last(i):
+            while q and q[0] <= i:
+                q.popleft()
+
+        N = len(nums)
+        res = [0] * (N - (k - 1))
+        q = deque() # mono dec queue, store index
+
+        # initial window
+        for i in range(k):
+            add_next(i)
+        res[0] = nums[q[0]]
+
+        for i in range(k, N):
+            remove_last(i - k)
+            add_next(i)
+
+            res[i - k + 1] = nums[q[0]]
+
+        return res
+
+    # O(n log k)
+    def maxSlidingWindow2(self, nums: List[int], k: int) -> List[int]:
+        
+        N = len(nums)
+        res = [0] * (N - (k - 1))
+        max_heap = []
+        counts = defaultdict(int)
+        # initial window
+        for i in range(k):
+            heapq.heappush(max_heap, -nums[i])
+            counts[nums[i]] += 1
+        res[0] = -max_heap[0]
+
+        # slide
+        for i in range(k, N):
+            # add next
+            heapq.heappush(max_heap, -nums[i])
+            counts[nums[i]] += 1
+
+            # remove
+            removed = nums[i - k]
+            counts[removed] -= 1 # should never be less than 0
+
+            # check if the biggest has been pushed out already
+            while counts[-max_heap[0]] == 0:
+                heapq.heappop(max_heap)
+            res[i - k + 1] = -max_heap[0]
+
+        return res
+    
     # heap
     # O(n log k)
     def maxSlidingWindow(self, nums: list[int], k: int) -> list[int]:
@@ -61,5 +123,3 @@ class Solution:
         
         return res
     
-s = Solution()
-print(s.maxSlidingWindow2(nums = [1,3,-1,-3,5,3,6,7], k = 3))
