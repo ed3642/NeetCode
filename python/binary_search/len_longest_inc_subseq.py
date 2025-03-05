@@ -1,7 +1,7 @@
 # https://leetcode.com/problems/longest-increasing-subsequence
 class Solution:
     def lengthOfLIS(self, nums: list[int]) -> int:
-        # This doesnt build the Actual LIS
+        # This builds a LIS
         # but it keeps the relative values in order where the seq generated will have the same length as the actual LIS
         
         def bisect_left(arr, item):
