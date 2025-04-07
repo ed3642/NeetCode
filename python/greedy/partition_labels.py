@@ -6,6 +6,26 @@ class Solution:
         
         counts = Counter(s)
         res = []
+        current_size = 0
+        in_window = set()
+
+        for c in s:
+            current_size += 1
+            counts[c] -= 1
+            in_window.add(c)
+
+            if counts[c] == 0:
+                in_window.remove(c)
+                if len(in_window) == 0:
+                    res.append(current_size)
+                    current_size = 0
+        
+        return res
+
+    def partitionLabels(self, s: str) -> List[int]:
+        
+        counts = Counter(s)
+        res = []
 
         i = 0
         while i < len(s):

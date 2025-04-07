@@ -3,6 +3,63 @@ from functools import lru_cache
 from typing import List
 
 class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        # optimal set solution
+         
+        _sum = sum(nums)
+        if _sum % 2 != 0:
+            return False
+        target = _sum // 2
+        can_build = set()
+
+        for num in nums:
+            for curr in list(can_build):
+                candidate = num + curr
+                if candidate < target:
+                    can_build.add(num + curr)
+                elif candidate == target:
+                    return True
+            can_build.add(num)
+        
+        return target in can_build
+
+    def canPartition(self, nums: List[int]) -> bool:
+
+        _sum = sum(nums)
+        if _sum % 2 != 0:
+            return False
+        
+        half = _sum // 2
+        can_build = [False] * (half + 1)
+        can_build[0] = True
+
+        for num in nums:
+            for curr_sum in range(half, num - 1, -1):
+                if can_build[half]:
+                    return True
+                can_build[curr_sum] = can_build[curr_sum] or can_build[curr_sum - num]
+
+        return can_build[half]
+
+    def canPartition(self, nums: List[int]) -> bool:
+        
+        @lru_cache(maxsize=None)
+        def can_split(i, rem):
+            if i >= len(nums) or rem < 0:
+                return False
+            if rem == 0:
+                return True
+
+            return can_split(i + 1, rem - nums[i]) or can_split(i + 1, rem)
+
+        _sum = sum(nums)
+        if _sum % 2 != 0:
+            return False
+        
+        nums.sort(reverse=True)
+
+        return can_split(0, _sum // 2)
+
     # O(n * half), (n + 1) * (half + 1) states and each states does O(1)
     def canPartition(self, nums: List[int]) -> bool:
         
