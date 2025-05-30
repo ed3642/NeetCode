@@ -53,5 +53,3 @@ class Solution:
         
         return best_node
     
-s = Solution()
-print(s.closestMeetingNode([9,8,7,0,5,6,1,3,2,2], 1, 6))
