@@ -1,7 +1,39 @@
 # https://leetcode.com/problems/path-with-maximum-probability/
 from collections import deque
+import heapq
+from typing import List
 
 class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start_node: int, end_node: int) -> float:
+
+        # when paths are always 
+        
+        adj_list = [[] for _ in range(n)]
+
+        for i in range(len(edges)):
+            _from, _to = edges[i]
+            adj_list[_from].append((_to, succProb[i]))
+            adj_list[_to].append((_from, succProb[i]))
+
+        visited = [False] * n
+        heap = [(-1, start_node)]
+
+        while heap:
+            p, node = heapq.heappop(heap)
+
+            if node == end_node:
+                return -p
+            
+            if visited[node]:
+                continue
+            visited[node] = True
+
+            for nei, nei_p in adj_list[node]:
+                if not visited[nei]:
+                    heapq.heappush(heap, (p * nei_p, nei))
+        
+        return 0 # no path
+
     def maxProbability(self, n: int, edges: list[list[int]], succProb: list[float], start_node: int, end_node: int) -> float:
         # SPFA but for longest path
         

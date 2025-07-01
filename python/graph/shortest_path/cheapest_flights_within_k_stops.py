@@ -1,8 +1,37 @@
-from collections import deque
+from collections import defaultdict, deque
 import heapq
+from typing import List
 
 # https://leetcode.com/problems/cheapest-flights-within-k-stops/
 class Solution:
+
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        # SPFA
+        
+        adj_list = defaultdict(list)
+
+        for _from, _to, p in flights:
+            adj_list[_from].append((_to, p))
+
+        NOT_SET = float('inf')
+        q = deque([(0, 0, src)])
+        price = defaultdict(lambda: NOT_SET)
+        max_next_num_stops = k + 1
+
+        while q:
+            p, stops, node = q.popleft()
+
+            next_num_stops = stops + 1
+            if next_num_stops > max_next_num_stops:
+                continue
+
+            for nei, nei_p in adj_list[node]:
+                cand_p = p + nei_p
+                if cand_p < price[nei]:
+                    q.append((p + nei_p, next_num_stops, nei))
+                    price[nei] = cand_p
+        
+        return price[dst] if price[dst] != NOT_SET else -1
 
     def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
         # SPFA

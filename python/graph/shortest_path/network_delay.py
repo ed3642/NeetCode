@@ -1,8 +1,40 @@
-import heapq
-from collections import deque
-
 # https://leetcode.com/problems/network-delay-time/
+
+import heapq
+from collections import defaultdict, deque
+from typing import List
+
 class Solution:
+
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+
+        # dont need a visited for this djikstras, use the times as a visited
+        
+        adj_list = defaultdict(list)
+
+        for _from, _to, t in times:
+            adj_list[_from].append((_to, t))
+
+        heap = [(0, k)]
+        times = defaultdict(list)
+
+        while heap:
+            t, node = heapq.heappop(heap)
+
+            if node in times:
+                continue
+
+            times[node] = t
+
+            if len(times) == n:
+                return t
+
+            for nei, nei_t in adj_list[node]:
+                if nei not in times:
+                    heapq.heappush(heap, (t + nei_t, nei))
+        
+        return -1
+
     # NOTE: nodes go from 1..n
     def networkDelayTime(self, times: list[list[int]], n: int, k: int) -> int:
         # dijkstra

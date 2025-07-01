@@ -1,4 +1,5 @@
 import heapq
+from typing import List
 
 # Kruskals
 
@@ -64,6 +65,37 @@ class Kruskals:
 # Prims
 
 class Prims:
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        
+        def calc_dist(p1, p2):
+            x1 = p1[0]
+            y1 = p1[1]
+            x2 = p2[0]
+            y2 = p2[1]
+            return abs(x1 - x2) + abs(y1 - y2)
+        
+        n = len(points)
+        total_dist = 0
+        heap = [(0, n - 1)]
+        visited = [False] * n
+        left_to_visit = n
+
+        while left_to_visit > 0:
+            dist, i = heapq.heappop(heap)
+
+            if visited[i]:
+                continue
+            visited[i] = True
+            left_to_visit -= 1
+            total_dist += dist
+            
+            for j in range(n):
+                if i != j and not visited[j]:
+                    heapq.heappush(heap, (calc_dist(points[i], points[j]), j))
+            
+        return total_dist
+    
+
     def minCostConnectPoints(self, points: list[list[int]]) -> int:
 
         def calcCost(a, b):

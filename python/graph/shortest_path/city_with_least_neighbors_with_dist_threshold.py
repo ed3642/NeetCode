@@ -1,7 +1,93 @@
-# https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/
+# https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance
+
+from collections import deque
 import heapq
+from typing import List
 
 class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+
+        def get_reachable(node):
+            heap = [(0, node)]
+            distance = [float('inf')] * n
+            distance[node] = 0
+            visited = [False] * n
+            reach_count = 0
+
+            while heap:
+                dist, node = heapq.heappop(heap)
+
+                if visited[node]:
+                    continue
+                visited[node] = True
+                reach_count += 1
+
+                for nei, nei_dist in al[node]:
+                    cand_dist = dist + nei_dist
+                    if cand_dist <= distanceThreshold and cand_dist < distance[nei]:
+                        distance[nei] = cand_dist
+                        heapq.heappush(heap, (cand_dist, nei))
+
+            return reach_count
+        
+        al = [[] for _ in range(n)]
+        for _from, _to, w in edges:
+            al[_from].append((_to, w))
+            al[_to].append((_from, w))
+
+        min_city = 0
+        min_city_reach = float('inf')
+
+        for city in range(n):
+            reach = get_reachable(city)
+            if reach <= min_city_reach:
+                min_city_reach = reach
+                min_city = city
+
+        return min_city
+
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+
+        def get_reachable(node):
+            # SPFA
+            q = deque([(0, node)])
+            distance = [float('inf')] * n
+            distance[node] = 0
+            reached = [False] * n
+            reached[node] = True
+            reach_count = 0
+
+            while q:
+                dist, node = q.popleft()
+
+                if not reached[node]:
+                    reach_count += 1
+                    reached[node] = True
+
+                for nei, nei_dist in al[node]:
+                    cand_dist = dist + nei_dist
+                    if cand_dist < distance[nei] and cand_dist <= distanceThreshold:
+                        distance[nei] = cand_dist
+                        q.append((cand_dist, nei))
+
+            return reach_count
+        
+        al = [[] for _ in range(n)]
+        for _from, _to, w in edges:
+            al[_from].append((_to, w))
+            al[_to].append((_from, w))
+
+        min_city = 0
+        min_city_reach = float('inf')
+
+        for city in range(n):
+            reach = get_reachable(city)
+            if reach <= min_city_reach:
+                min_city_reach = reach
+                min_city = city
+
+        return min_city
+    
     def findTheCity(self, n: int, edges: list[list[int]], distanceThreshold: int) -> int:
         
         def djikstra(root):

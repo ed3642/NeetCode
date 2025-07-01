@@ -1,8 +1,40 @@
 from collections import deque
 import heapq
+from typing import List
 
 class Solution:
-    # faster
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+
+        def is_in_bounds(i, j):
+            return 0 <= i < I_BOUND and 0 <= j < J_BOUND
+
+
+        I_BOUND = len(heights)
+        J_BOUND = len(heights[0])
+
+        NOT_SET = float('inf')
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        heap = [(0, 0, 0)]
+        weight = [[NOT_SET] * J_BOUND for _ in range(I_BOUND)]
+
+        while heap:
+            w, i, j = heapq.heappop(heap)
+
+            if i == I_BOUND - 1 and j == J_BOUND - 1:
+                return w
+
+            if weight[i][j] != NOT_SET:
+                continue
+            weight[i][j] = w
+
+            for d_i, d_j in directions:
+                n_i = i + d_i
+                n_j = j + d_j
+                if is_in_bounds(n_i, n_j) and weight[n_i][n_j] == NOT_SET:
+                    heapq.heappush(heap, (max(abs(heights[i][j] - heights[n_i][n_j]), w), n_i, n_j))
+
+        return -1 # shouldnt happen
+
     def minimumEffortPath(self, heights: list[list[int]]) -> int:
         # djikstras where distance is defined by consecutive cell diff
         # dest is (n, m)

@@ -3,7 +3,7 @@ class Solution:
     def lengthOfLIS(self, nums: list[int]) -> int:
         # This builds a LIS
         # but it keeps the relative values in order where the seq generated will have the same length as the actual LIS
-        
+
         def bisect_left(arr, item):
             l = 0
             r = len(arr)

@@ -1,5 +1,6 @@
 # https://leetcode.com/problems/most-stones-removed-with-same-row-or-column
 from collections import defaultdict
+from typing import List
 
 class UnionFind:
     def __init__(self, elems):
@@ -26,6 +27,36 @@ class UnionFind:
                 self.ranks[root_a] += 1
 
 class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+
+        def dfs(r, c):
+            if (r, c) in visited:
+                return 0
+            visited.add((r, c))
+            
+            count = 1
+            for nei_r in rows[c]:
+                count += dfs(nei_r, c)
+            for nei_c in cols[r]:
+                count += dfs(r, nei_c)
+        
+            return count
+        
+        rows = defaultdict(list)
+        cols = defaultdict(list)
+        visited = set()
+
+        for r, c in stones:
+            rows[c].append(r)
+            cols[r].append(c)
+        
+        count = 0
+        for r, c in stones:
+            if (r, c) not in visited:
+                count += dfs(r, c) - 1
+        
+        return count
+
     def removeStones(self, stones: list[list[int]]) -> int:
         
         N = len(stones)
