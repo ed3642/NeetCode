@@ -1,4 +1,18 @@
+# https://leetcode.com/problems/min-cost-climbing-stairs
+
+from typing import List
+
 class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        
+        N = len(cost)
+        cost.append(0) # to reach this
+
+        for i in range(2, N + 1):
+            cost[i] += min(cost[i - 2], cost[i - 1])
+
+        return cost[N]
+    
     def minCostClimbingStairs(self, cost: list[int]) -> int:
         n = len(cost)
         dp = cost

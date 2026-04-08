@@ -1,7 +1,7 @@
 class Solution:
     # O(n ^ group_size)
     def nSum(self, nums: list[int], target: int, group_size: int) -> list[list[int]]:
-        def findNsum(l, r, target, N, result, results):
+        def findNsum(l, r, target, N, result):
             if r - l + 1 < N or N < 2 or target < nums[l] * N or target > nums[r] * N: # early termination
                 return
             if N == 2: # two pointers solve sorted 2-sum problem
@@ -19,9 +19,9 @@ class Solution:
             else: # recursively reduce N
                 for i in range(l, r + 1):
                     if i == l or (i > l and nums[i - 1] != nums[i]):
-                        findNsum(i + 1, r, target - nums[i], N - 1, result + [nums[i]], results)
+                        findNsum(i + 1, r, target - nums[i], N - 1, result + [nums[i]])
 
         nums.sort()
         results = []
-        findNsum(0, len(nums) - 1, target, group_size, [], results)
+        findNsum(0, len(nums) - 1, target, group_size, [])
         return results

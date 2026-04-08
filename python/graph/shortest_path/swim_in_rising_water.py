@@ -1,7 +1,39 @@
+# https://leetcode.com/problems/swim-in-rising-water
+
 import heapq
+from typing import List
 
 class Solution:
-    # https://leetcode.com/problems/swim-in-rising-water/
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        
+        def is_in_bounds(i, j):
+            return 0 <= i < I_BOUND and 0 <= j < J_BOUND
+        
+        I_BOUND = len(grid)
+        J_BOUND = len(grid[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        VISITED = -1
+
+        heap = [(grid[0][0], 0, 0)]
+        t = 0
+
+        while heap:
+            elevation, i, j = heapq.heappop(heap)
+
+            t = max(elevation, t)
+
+            if i == I_BOUND - 1 and j == J_BOUND - 1:
+                return t
+
+            for d_i, d_j in directions:
+                n_i = i + d_i
+                n_j = j + d_j
+                if is_in_bounds(n_i, n_j) and grid[n_i][n_j] != VISITED:
+                    heapq.heappush(heap, (grid[n_i][n_j], n_i, n_j))
+                    grid[n_i][n_j] = VISITED
+        
+        return -1 # shouldnt happen
+    
     def swimInWater(self, grid: list[list[int]]) -> int:
         # djikstra, distance is how long you have to wait
 

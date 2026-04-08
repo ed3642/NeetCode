@@ -1,6 +1,36 @@
+# https://leetcode.com/problems/evaluate-reverse-polish-notation
+
 from collections import deque
+from typing import List
 
 class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        
+        stack = []
+        
+        for t in tokens:
+            if t == '+':
+                a = stack.pop()
+                b = stack.pop()
+                stack.append(b + a)
+            elif t == '-':
+                a = stack.pop()
+                b = stack.pop()
+                stack.append(b - a)
+            elif t == '*':
+                a = stack.pop()
+                b = stack.pop()
+                stack.append(b * a)
+            elif t == '/':
+                a = stack.pop()
+                b = stack.pop()
+                temp = abs(b) // abs(a)
+                stack.append(-temp if (a < 0) ^ (b < 0) else temp)
+            else:
+                stack.append(int(t))
+        
+        return stack.pop()
+
     def evalRPN(self, tokens: list[str]) -> int:
         def evalOperation(a: int, b: int, operation):
             if operation == '+':

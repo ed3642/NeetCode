@@ -1,3 +1,19 @@
+from typing import List
+
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.pf_sum = nums
+
+        for i in range(1, len(nums)):
+            self.pf_sum[i] += self.pf_sum[i - 1]
+
+    def sumRange(self, left: int, right: int) -> int:
+        if left == 0:
+            return self.pf_sum[right]
+        return self.pf_sum[right] - self.pf_sum[left - 1]
+
+
 class NumArray:
 
     def __init__(self, nums: list[int]):

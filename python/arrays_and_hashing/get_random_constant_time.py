@@ -5,6 +5,37 @@ import random
 class RandomizedSet:
 
     def __init__(self):
+        self.values = []
+        self.val_i = {}
+
+    def insert(self, val: int) -> bool:
+        if val not in self.val_i:
+            self.val_i[val] = len(self.values)
+            self.values.append(val)
+            return True
+        return False
+
+    def remove(self, val: int) -> bool:
+        if val in self.val_i:
+            i = self.val_i[val]
+            last_i = len(self.values) - 1
+            # put elem we want to remove at the end
+            if last_i != i:
+                # update to be swapped elems index
+                self.val_i[self.values[last_i]] = i
+                # swap
+                self.values[last_i], self.values[i] = self.values[i], self.values[last_i]
+            del self.val_i[val]
+            self.values.pop()
+            return True
+        return False
+
+    def getRandom(self) -> int:
+        return random.choice(self.values)
+
+class RandomizedSet:
+
+    def __init__(self):
         self.values = [] # val at each index
         self.val_index = defaultdict(int) # index of each val
 

@@ -1,4 +1,24 @@
+# https://leetcode.com/problems/house-robber
+
+from typing import List
+
 class Solution:
+    def rob(self, nums: List[int]) -> int:
+        
+        N = len(nums)
+
+        if N == 1:
+            return nums[0]
+        
+        max_rob = nums
+        max_rob.append(0) # to reach
+        max_rob[1] = max(nums[0], nums[1])
+
+        for i in range(2, N + 1):
+            max_rob[i] = max(nums[i - 2] + max_rob[i], max_rob[i - 1])
+
+        return max_rob[N]
+    
     def rob(self, nums: list[int]) -> int:
         if len(nums) == 1:
             return nums[0]

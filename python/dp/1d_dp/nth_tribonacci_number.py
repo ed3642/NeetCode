@@ -1,4 +1,26 @@
+# https://leetcode.com/problems/n-th-tribonacci-number
+
 class Solution:
+    def tribonacci(self, n: int) -> int:
+
+        if n == 0:
+            return 0
+        elif n == 1:
+            return 1
+        elif n == 2:
+            return 1
+        
+        three = 0
+        two = 1
+        one = 1
+        f = one + two + three
+
+        for _ in range(3, n + 1):
+            f = one + two + three
+            one, two, three = f, one, two
+
+        return f
+
     def tribonacci(self, n: int) -> int:
         dp = [0] * (n + 1)
         dp[0] = 0

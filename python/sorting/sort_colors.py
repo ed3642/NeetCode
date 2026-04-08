@@ -3,6 +3,32 @@ from typing import List
 
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        
+        # [2,0,2,1,1,0]
+        # [0,0,2,1,1,2]
+        # [0,0,1,1,2,2]
+
+        placer = 0
+        l = 0
+        r = len(nums) - 1
+        while placer <= r:
+            if nums[placer] == 0:
+                # put the 0 on the left
+                nums[placer], nums[l] = nums[l], nums[placer]
+                l += 1
+                placer += 1
+            elif nums[placer] == 2:
+                # put the 2 on the right
+                nums[placer], nums[r] = nums[r], nums[placer]
+                r -= 1
+            else:
+                # dont know where this 1 will go, skip it
+                placer += 1
+
+    def sortColors(self, nums: List[int]) -> None:
         N = len(nums)
         l = 0
         r = N - 1

@@ -1,3 +1,4 @@
+from typing import List
 
 class Solution:
     # best
@@ -15,6 +16,26 @@ class Solution:
 
         res = []
         backtrack(0)
+        return res
+    
+    # better
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        
+        def bt(builder, in_builder):
+            if len(builder) == len(nums):
+                res.append(builder.copy())
+            
+            for i in range(len(nums)):
+                if not 1 << i & in_builder:
+                    builder.append(nums[i])
+                    in_builder += 1 << i
+                    bt(builder, in_builder)
+                    in_builder -= 1 << i
+                    builder.pop()
+
+        res = []
+        in_builder = 0
+        bt([], in_builder)
         return res
 
     # faster

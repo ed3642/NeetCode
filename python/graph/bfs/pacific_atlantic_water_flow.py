@@ -1,8 +1,73 @@
 # https://leetcode.com/problems/pacific-atlantic-water-flow
+
 from collections import deque
 from typing import List
 
 class Solution:
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        
+        def is_in_bounds(i, j):
+            return 0 <= i < I_BOUND and 0 <= j < J_BOUND
+        
+        I_BOUND = len(heights)
+        J_BOUND = len(heights[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        CAN_REACH = 1
+        UNVISITED = 0
+
+        atlantic_cells = [[UNVISITED] * J_BOUND for _ in range(I_BOUND)]
+        pacific_cells = [[UNVISITED] * J_BOUND for _ in range(I_BOUND)]
+
+        # atlantic shore
+        stack = []
+        for i in range(I_BOUND):
+            stack.append((i, J_BOUND - 1))
+            atlantic_cells[i][J_BOUND - 1] = CAN_REACH
+        for j in range(J_BOUND - 1):
+            stack.append((I_BOUND - 1, j))
+            atlantic_cells[I_BOUND - 1][j] = CAN_REACH
+
+        while stack:
+            i, j = stack.pop()
+
+            for d_i, d_j in directions:
+                n_i = i + d_i
+                n_j = j + d_j
+                if (is_in_bounds(n_i, n_j) and 
+                    atlantic_cells[n_i][n_j] == UNVISITED and 
+                    heights[i][j] <= heights[n_i][n_j]):
+                    stack.append((n_i, n_j))
+                    atlantic_cells[n_i][n_j] = True
+
+        # pacific shore
+        stack = []
+        for i in range(I_BOUND):
+            stack.append((i, 0))
+            pacific_cells[i][0] = CAN_REACH
+        for j in range(1, J_BOUND):
+            stack.append((0, j))
+            pacific_cells[0][j] = CAN_REACH
+
+        while stack:
+            i, j = stack.pop()
+
+            for d_i, d_j in directions:
+                n_i = i + d_i
+                n_j = j + d_j
+                if (is_in_bounds(n_i, n_j) and 
+                    pacific_cells[n_i][n_j] == UNVISITED and 
+                    heights[i][j] <= heights[n_i][n_j]):
+                    stack.append((n_i, n_j))
+                    pacific_cells[n_i][n_j] = True
+        
+        res = []
+        for i in range(I_BOUND):
+            for j in range(J_BOUND):
+                if atlantic_cells[i][j] == CAN_REACH and pacific_cells[i][j] == CAN_REACH:
+                    res.append((i, j))
+
+        return res
+
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         # reverse the problem
 
