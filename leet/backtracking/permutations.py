@@ -1,0 +1,113 @@
+from typing import List
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+
+        # a good analogy for this permutations algo is seating people in a line
+        # try all people in position placer_i then swap all people into that spot
+        # the bt fixes the prev placer_i and now we do the same for the rest of the line
+        
+        def bt(placer_i):
+            if placer_i == N:
+                res.append(nums.copy())
+            
+            for i in range(placer_i, N):
+                nums[placer_i], nums[i] = nums[i], nums[placer_i]
+                bt(placer_i + 1)
+                nums[placer_i], nums[i] = nums[i], nums[placer_i]
+
+        N = len(nums)
+        res = []
+        bt(0)
+        return res
+
+    # best
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        def backtrack(start):
+            if start == len(nums):
+                res.append(nums.copy())
+            
+            for i in range(start, len(nums)):
+                # swap with start
+                nums[start], nums[i] = nums[i], nums[start]
+                backtrack(start + 1)
+                # swap back to original positions
+                nums[start], nums[i] = nums[i], nums[start]
+
+        res = []
+        backtrack(0)
+        return res
+    
+    # better
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        
+        def bt(builder, in_builder):
+            if len(builder) == len(nums):
+                res.append(builder.copy())
+            
+            for i in range(len(nums)):
+                if not 1 << i & in_builder:
+                    builder.append(nums[i])
+                    in_builder += 1 << i
+                    bt(builder, in_builder)
+                    in_builder -= 1 << i
+                    builder.pop()
+
+        res = []
+        in_builder = 0
+        bt([], in_builder)
+        return res
+
+    # faster
+    def permute1(self, nums: list[int]) -> list[list[int]]:
+        def backtrack(builder: list):
+            if len(builder) == len(nums):
+                perms.append(builder.copy())
+
+            for i in range(len(nums)):
+                if not index_used[i]:
+                    index_used[i] = True
+                    builder.append(nums[i])
+                    backtrack(builder)
+                    index_used[i] = False
+                    builder.pop()
+
+        perms = []
+        index_used = [False] * len(nums)
+        backtrack([])
+        return perms
+
+    # slower, still more practical for memory safe
+    def permute2(self, nums: list[int]) -> list[list[int]]:
+        def backtrack(builder):
+            if len(builder) == k:
+                res.append(builder.copy())
+            
+            for num in nums:
+                if num not in builder:
+                    builder.append(num)
+                    backtrack(builder)
+                    builder.pop()
+
+        res = []
+        k = len(nums)
+        backtrack([])
+        return res
+    
+# time
+    
+import time
+def time_functions(func1, func2, *args, **kwargs):
+    start_time = time.time()
+    func1(*args, **kwargs)
+    end_time = time.time()
+    print(f"Execution time of {func1.__name__}: {end_time - start_time} seconds")
+
+    start_time = time.time()
+    func2(*args, **kwargs)
+    end_time = time.time()
+    print(f"Execution time of {func2.__name__}: {end_time - start_time} seconds")
+
+sol = Solution()
+print("Timing:")
+time_functions(sol.permute1, sol.permute2, [i for i in range(11)])
