@@ -1,4 +1,43 @@
 # https://leetcode.com/problems/range-sum-query-mutable/description/
+from typing import List
+
+class NumArray:
+    # 2026
+    def __init__(self, nums: List[int]):
+        self.n = len(nums)
+        self.tree = [0] * (self.n + 1)
+        self.nums = nums
+
+        # init tree
+        for i in range(1, self.n + 1):
+            self.tree[i] = nums[i - 1]
+        for i in range(1, self.n + 1):
+            j = i + (i & -i)
+            if j <= self.n:
+                self.tree[j] += self.tree[i]
+
+    def update(self, index: int, val: int) -> None:
+        delta = val - self.nums[index]
+        self.nums[index] = val
+        # make index 1 indexed for tree
+        index += 1
+        while index <= self.n:
+            self.tree[index] += delta
+            index += index & -index
+
+    def sumRange(self, left: int, right: int) -> int:
+        # make indexes 1 indexed for tree
+        left += 1
+        right += 1
+        return self.query(right) - self.query(left - 1)
+
+    def query(self, i):
+        res = 0
+        while i > 0:
+            res += self.tree[i]
+            i -= i & -i 
+        return res
+
 class NumArray:
     # fenwich tree bst
     def __init__(self, nums: list[int]):

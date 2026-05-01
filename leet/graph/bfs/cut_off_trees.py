@@ -7,6 +7,112 @@ from typing import List
 class Solution:
     def cutOffTree(self, forest: List[List[int]]) -> int:
         
+        def astar(i, j, target_i, target_j):
+            def heu(i, j):
+                # manhattan dist
+                return abs(target_i - i) + abs(target_j - j)
+
+            if i == target_i and j == target_j:
+                return 0
+
+            h = [(heu(i, j), i, j)]
+            distances = [[float('inf')] * M for _ in range(N)] # building the whole grid is faster than a dictionary of a subset of the nodes
+            distances[i][j] = 0
+
+            while h:
+                _, i, j = heapq.heappop(h)
+                if (i, j) == (target_i, target_j):
+                    return distances[i][j]
+
+                for di, dj in directions:
+                    ni = i + di
+                    nj = j + dj
+                    if is_in_bounds(ni, nj) and forest[ni][nj] > 0:
+                        cand_dist = distances[i][j] + 1
+                        if cand_dist < distances[ni][nj]:
+                            f = heu(ni, nj) + cand_dist
+                            heapq.heappush(h, (f, ni, nj))
+                            distances[ni][nj] = cand_dist
+            
+            return -1 # no path found
+        
+        def is_in_bounds(i, j):
+            return 0 <= i < N and 0 <= j < M
+
+        N = len(forest)
+        M = len(forest[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        order = [(0, 0, 0)] # starting node
+
+        for i in range(N):
+            for j in range(M):
+                if forest[i][j] > 1:
+                    order.append((forest[i][j], i, j))
+        
+        order.sort(key=lambda x: x[0])
+
+        total_dist = 0
+        for i in range(1, len(order)):
+            dist = astar(order[i][1], order[i][2], order[i - 1][1], order[i - 1][2])
+            if dist == -1:
+                return -1
+            total_dist += dist
+
+        return total_dist
+
+    def cutOffTree(self, forest: List[List[int]]) -> int:
+        
+        def bfs(i, j, target_i, target_j):
+            if i == target_i and j == target_j:
+                return 0
+
+            q = deque([(i, j)])
+            visited = set([(i, j)])
+
+            dist = 0
+
+            while q:
+                dist += 1
+                for _ in range(len(q)):
+                    i, j = q.popleft()
+
+                    for di, dj in directions:
+                        ni = i + di
+                        nj = j + dj
+                        if is_in_bounds(ni, nj) and forest[ni][nj] > 0 and (ni, nj) not in visited:
+                            if (ni, nj) == (target_i, target_j):
+                                return dist
+                            visited.add((ni, nj))
+                            q.append((ni, nj))
+            
+            return -1 # no path found
+        
+        def is_in_bounds(i, j):
+            return 0 <= i < N and 0 <= j < M
+
+        N = len(forest)
+        M = len(forest[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        order = [(0, 0, 0)] # starting node
+
+        for i in range(N):
+            for j in range(M):
+                if forest[i][j] > 1:
+                    order.append((forest[i][j], i, j))
+        
+        order.sort(key=lambda x: x[0])
+
+        total_dist = 0
+        for i in range(1, len(order)):
+            dist = bfs(order[i][1], order[i][2], order[i - 1][1], order[i - 1][2])
+            if dist == -1:
+                return -1
+            total_dist += dist
+
+        return total_dist
+
+    def cutOffTree(self, forest: List[List[int]]) -> int:
+        
         def astar(i, j, i_final, j_final):
             if i == i_final and j == j_final:
                 return 0
