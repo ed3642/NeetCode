@@ -25,6 +25,23 @@ class Solution:
             res[i] = intersection_count
 
         return res
+    
+    def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
+        
+        n = len(A)
+        f = [0] * (n+1)
+        res = [0] * n
+
+        for i in range(n):
+            f[A[i]] += 1
+            if f[A[i]] == 2:
+                res[i] += 1
+            f[B[i]] += 1
+            if f[B[i]] == 2:
+                res[i] += 1
+            res[i] += res[i-1] if i > 0 else 0
+        
+        return res
 
     def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
         

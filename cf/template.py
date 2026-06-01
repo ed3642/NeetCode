@@ -8,9 +8,7 @@ def read_int(): return int(input())
 def read_ints(): return list(map(int, input().split()))
 def read_chars(): return list(input().strip())
 def read_int_iter(): return map(int, input().split())
-
-def read_input():
-    return read_ints()
+def read_all(): return sys.stdin.read().split('/n')
 
 def solve(data):
     ...
@@ -20,7 +18,7 @@ def main():
     t = int(line) if line else 1
 
     for _ in range(t):
-        data = read_input()
+        data = read_all()
         ans = solve(data)
         if ans is not None:
             print(ans)

@@ -1,5 +1,6 @@
 from functools import lru_cache
 from enum import Enum
+from typing import List
 
 class State(Enum):
     CAN_BUY = 1
@@ -7,6 +8,69 @@ class State(Enum):
     # MUST_WAIT = 3, since we must wait 1 day each time we can just skip the next day when we buy and not have to worry about this state
 
 class Solution:
+
+    def maxProfit(self, prices: List[int]) -> int:
+        # can also not max states with self if we do the solution below
+        # but this is more general
+        
+        n = len(prices)
+        NINF = float('-inf')
+        OPEN = 0
+        HOLD = 1
+        dp = [[0, NINF] for _ in range(n)] # starts all HOLD states with NINF
+        dp[0][HOLD] = -prices[0]
+
+        for i in range(1, n):
+            # sell or keep open
+            dp[i][OPEN] = max(dp[i-1][HOLD] + prices[i], dp[i-1][OPEN], dp[i][OPEN]) 
+
+            # buy or keep holding
+            last_valid_open = i-2 if i > 2 else 0
+            dp[i][HOLD] = max(dp[last_valid_open][OPEN] - prices[i], dp[i-1][HOLD], dp[i][HOLD]) 
+
+        return dp[n-1][OPEN]
+
+    # O(n)
+    def maxProfit(self, prices: List[int]) -> int:
+        # interesting insight is that for this state machine you dont max states with themselves as that leads to invalid states. 
+        # It can be like buying a stock for free.
+        # can also make it so you max with self if you initialize all HOLD states with NINF
+        
+        n = len(prices)
+        # dp[i][state] = max profit realized at i and if were holding or open
+        OPEN = 0
+        HOLD = 1
+        dp = [[0 for _ in range(2)] for _ in range(n)]
+        dp[0][HOLD] = -prices[0]
+
+        for i in range(1, n):
+            # sell or keep open
+            dp[i][OPEN] = max(dp[i-1][HOLD] + prices[i], dp[i-1][OPEN]) 
+
+            # buy or keep holding
+            last_valid_open = i-2 if i > 2 else 0
+            dp[i][HOLD] = max(dp[last_valid_open][OPEN] - prices[i], dp[i-1][HOLD]) 
+
+        return dp[n-1][OPEN]
+
+    def maxProfit(self, prices: List[int]) -> int:
+        # works but O(n^2) there are alot of optimizations to do
+        # O(n) is possible
+        
+        n = len(prices)
+        # dp[i][holding] = max profit at i and if were holding, cd or open 
+        OPEN = 0
+        HOLD = 1
+        CD = 2
+        dp = [[0 for _ in range(3)] for _ in range(n)]
+
+        for r in range(n):
+            for l in range(r):
+                dp[r][HOLD] = max(dp[l][OPEN], dp[r][HOLD])
+                dp[r][OPEN] = max(dp[l][CD], dp[r][OPEN])
+                dp[r][CD] = max(dp[l][HOLD] + prices[r] - prices[l], dp[r][CD])
+
+        return max(dp[n - 1])
 
     def maxProfit(self, prices: list[int]) -> int:
         # some pruning implemented

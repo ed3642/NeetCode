@@ -1,7 +1,28 @@
+# https://leetcode.com/problems/word-break/submissions
+
 from functools import lru_cache
 from typing import List
 
 class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+
+        # catsandogcat
+        # aaaaaaa
+        # 0011001
+        
+        n = len(s)
+        d = set(wordDict)
+        dp = [0] * (n + 1)
+        dp[0] = 1
+        
+        for end in range(n + 1):
+            for start in range(end):
+                word = s[start:end]
+                if dp[start] == 1 and word in d:
+                    dp[end] = 1
+
+        return True if dp[n] == 1 else False
+
     # most intuitive
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         

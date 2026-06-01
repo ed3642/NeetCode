@@ -3,6 +3,29 @@ from collections import deque
 from typing import List
 
 class Solution:
+    def rotateTheBox(self, boxGrid: List[List[str]]) -> List[List[str]]:
+        # could do the shifting of the stones more efficient with 2 pointer instead
+        
+        STONE = '#'
+        WALL = '*'
+        EMPTY = '.'
+        n = len(boxGrid[0])
+
+        for row in boxGrid:
+            stones = 0
+            for i in range(n):
+                if row[i] == WALL:
+                    for j in range(i - 1, i - 1 - stones, -1):
+                        row[j] = STONE
+                    stones = 0
+                elif row[i] == STONE:
+                    row[i] = EMPTY
+                    stones += 1
+            for j in range(n - 1, n - 1 - stones, -1):
+                row[j] = STONE
+        
+        return list(zip(*reversed(boxGrid)))
+
     # could have just done it with 2 pointers instead of queue
     def rotateTheBox(self, box: List[List[str]]) -> List[List[str]]:
 

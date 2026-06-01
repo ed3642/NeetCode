@@ -1,7 +1,34 @@
 # https://leetcode.com/problems/perfect-squares
+from collections import deque
 from functools import lru_cache
+import math
 
 class Solution:
+    # O(n sqrt n)
+    def numSquares(self, n: int) -> int:
+        
+        squares = [num * num for num in range(int(math.sqrt(n)) + 1)]
+
+        q = deque([n])
+        visited = [False] * (n + 1)
+        visited[n] = True
+
+        steps = 0
+        while q:
+            for _ in range(len(q)):
+                node = q.popleft()
+                if node == 0:
+                    return steps
+                for s in squares:
+                    nei = node - s
+                    if nei >= 0 and not visited[nei]:
+                        q.append(nei)
+                        visited[nei] = True
+            
+            steps += 1
+        
+        return -1 # shouldnt happen
+
     def numSquares(self, n: int) -> int:
         
         @lru_cache(maxsize=None)

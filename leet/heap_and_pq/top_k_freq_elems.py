@@ -43,7 +43,7 @@ class Solution:
 
         return [num for _, num in elems[kth_elem_i:]]
 
-    # there is an O(n) solution: quickselect
+    # there is an Average(n) solution: quickselect, though O(n)
     # quickselect can be used to solve top-k type problems instead of heap
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         

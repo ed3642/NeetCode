@@ -1,6 +1,23 @@
-from functools import lru_cache
 # https://leetcode.com/problems/coin-change-ii/
+
+from functools import lru_cache
+from typing import List
+
 class Solution:
+    
+    def change(self, amount: int, coins: List[int]) -> int:
+        
+        # ways to make amount 
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+
+        for coin in coins:
+            for val in range(1, amount + 1):
+                if val-coin >= 0:
+                    dp[val] += dp[val - coin]
+
+        return dp[amount]
+
     def change(self, amount: int, coins: list[int]) -> int:
         n = len(coins)
         ways = [[0 for _ in range(amount + 1)] for _ in range(n + 1)]

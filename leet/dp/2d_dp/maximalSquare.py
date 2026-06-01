@@ -1,6 +1,30 @@
+# https://leetcode.com/problems/maximal-square
+
 from functools import lru_cache
+from typing import List
 
 class Solution:
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        
+        n = len(matrix)
+        m = len(matrix[0])
+
+        for i in range(n):
+            for j in range(m):
+                matrix[i][j] = int(matrix[i][j])
+
+        for i in range(1, n):
+            for j in range(1, m):
+                if matrix[i][j] > 0:
+                    matrix[i][j] = min(matrix[i - 1][j], matrix[i - 1][j - 1], matrix[i][j - 1]) + 1
+        
+        max_num = 0
+        for i in range(n):
+            for j in range(m):
+                max_num = max(matrix[i][j], max_num)
+        
+        return max_num * max_num
+    
     def maximalSquare(self, matrix: list[list[str]]) -> int:
         
         @lru_cache(maxsize=None)

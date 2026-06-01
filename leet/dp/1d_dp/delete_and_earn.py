@@ -1,7 +1,31 @@
 from collections import Counter, defaultdict
 from functools import lru_cache
+from typing import List
 
 class Solution:
+    def deleteAndEarn(self, nums: List[int]) -> int:
+        # [2,3,4]
+        
+        max_num = max(nums)
+        vals = [0] * (max_num + 1)
+        n = len(vals)
+
+        for num in nums:
+            vals[num] += num
+        
+        if len(vals) == 1:
+            return vals[0]
+        elif len(vals) == 2:
+            return max(vals[0], vals[1])
+        
+        dp = [0] * n
+        dp[0] = vals[0]
+        dp[1] = vals[1]
+
+        for i in range(2, n):
+            dp[i] = max(dp[i - 1], dp[i - 2] + vals[i])
+
+        return dp[n - 1]
 
     # topdown -> bottomup from below
     def deleteAndEarn(self, nums: list[int]) -> int:

@@ -1,6 +1,21 @@
+# https://leetcode.com/problems/minimum-falling-path-sum
+
 from functools import lru_cache
+from typing import List
 
 class Solution:
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        
+        n = len(matrix)
+        
+        for i in range(1, n):
+            for j in range(n):
+                l = j - 1 if j > 0 else 0
+                r = j + 1 if j < n - 1 else n - 1
+                matrix[i][j] += min(matrix[i - 1][l], matrix[i - 1][j], matrix[i - 1][r])
+        
+        return min(matrix[n - 1])
+    
     def minFallingPathSum(self, matrix: list[list[int]]) -> int:
         
         @lru_cache(maxsize=None)

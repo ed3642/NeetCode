@@ -1,6 +1,63 @@
+# https://leetcode.com/problems/edit-distance
+
 from functools import lru_cache
 
 class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        
+        @lru_cache(maxsize=None)
+        def dp(i, j):
+
+            if i == len(word1) and j == len(word2):
+                return 0
+            
+            if i == len(word1):
+                return len(word2) - j
+            if j == len(word2):
+                return len(word1) - i
+
+            if word1[i] == word2[j]:
+                return dp(i + 1, j + 1)
+            
+            insert = dp(i, j + 1)
+            delete = dp(i + 1, j)
+            replace = dp(i + 1, j + 1)
+
+            return min(insert, delete, replace) + 1
+        
+        return dp(0, 0)
+
+    def minDistance(self, word1: str, word2: str) -> int:
+
+        if not word1:
+            return len(word2)
+        if not word2:
+            return len(word1)
+
+        # do with bu dp
+        INF = float('inf')
+        n = len(word1)
+        m = len(word2)
+        # dp[i][j] min ops to make strings eq up to i and j on each string respectively
+        dp = [[INF for _ in range(m+1)] for _ in range(n+1)]
+        dp[0][0] = 0 # empty strings
+        
+        for i in range(1, n+1): # empty word2, cost is all of remaining word1
+            dp[i][0] = i
+        for j in range(1, m+1): # empty word1
+            dp[0][j] = j
+
+        for i in range(1, n+1):
+            for j in range(1, m+1):
+                if word1[i-1] == word2[j-1]:
+                    dp[i][j] = min(dp[i-1][j-1], dp[i][j]) # equal
+                else:
+                    dp[i][j] = min(dp[i][j-1]+1, # insert
+                                dp[i-1][j]+1, # delete
+                                dp[i-1][j-1]+1) # replace
+
+        return dp[n][m]
+        
     def minDistance(self, word1: str, word2: str) -> int:
         
         @lru_cache(maxsize=None)

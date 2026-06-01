@@ -1,4 +1,32 @@
 class Solution:
+    # O(n^2)
+    # there is a way to get it in O(n) but its an involved algo called Manacher's Algorithm
+    def longestPalindrome(self, s: str) -> str:
+
+        if not s:
+            return ''
+        
+        n = len(s)
+        res = s[0]
+
+        # check even len pals
+        for i in range(1, n):
+            d = 1
+            while i - d >= 0 and i + d - 1 < n and s[i + d - 1] == s[i - d]:
+                if 2 * d > len(res):
+                    res = s[i - d:i + d]
+                d += 1
+
+        # # check odd len pals
+        for i in range(1, n):
+            d = 1
+            while i - d >= 0 and i + d < n and s[i + d] == s[i - d]:
+                if 2 * d + 1 > len(res):
+                    res = s[i - d:i + d + 1]
+                d += 1
+
+        return res
+    
     def longestPalindrome(self, s: str) -> str:
         
         def expand(i, is_even=False):

@@ -1,7 +1,18 @@
 from math import comb
 from functools import lru_cache
+import math
 
 class Solution:
+    
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        # is a counting problem, how many ways to arrange a sequence of right and downs
+
+        # nCr(a, b) = a!/(a - b)!b!
+        a = (m - 1) + (n - 1) # seq len
+        b = n - 1 # or m - 1, both work, choosing the first set locks in the second set doesnt matter order of sets chosen
+
+        return math.comb(a, b)
     
     # math counting way
     def uniquePaths(self, m: int, n: int) -> int:
