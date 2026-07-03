@@ -1,6 +1,8 @@
 # https://leetcode.com/problems/create-binary-tree-from-descriptions/
 # Definition for a binary tree node.
 from typing import Optional
+from collections import defaultdict
+from typing import List
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -9,6 +11,28 @@ class TreeNode:
         self.right = right
 
 class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        
+        nodes = defaultdict(TreeNode)
+        cand_root = set() # only one node should not be a child of anyone, that is the root
+        not_root = set()
+
+        for parent, child, isleft in descriptions:
+            if parent not in nodes:
+                nodes[parent] = TreeNode(parent)
+            if child not in nodes:
+                nodes[child] = TreeNode(child)
+            cand_root.add(parent)
+            not_root.add(child)
+
+            if isleft:
+                nodes[parent].left = nodes[child]
+            else:
+                nodes[parent].right = nodes[child]
+        
+        root = (cand_root-not_root).pop()
+        return nodes[root]
+
     def createBinaryTree(self, descriptions: list[list[int]]) -> Optional[TreeNode]:
         
         nodes = {}

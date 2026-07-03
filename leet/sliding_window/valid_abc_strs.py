@@ -16,6 +16,29 @@ class Solution:
                 valid_strs += min(latest_i.values()) + 1
         
         return valid_strs
+    
+    def numberOfSubstrings(self, s: str) -> int:
+
+        # abcabc
+        # 4+3+2+1
+        
+        N = len(s)
+        f = defaultdict(int)
+        count = 0
+        
+        l = 0
+        for r in range(N):
+            right_c = s[r]
+            f[right_c] += 1
+            while len(f) == 3:
+                c = s[l]
+                f[c] -= 1
+                if f[c] == 0:
+                    del f[c]
+                count += N-r
+                l += 1
+        
+        return count
 
     def numberOfSubstrings(self, s: str) -> int:
         

@@ -14,6 +14,27 @@ class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         
         def dfs(node):
+            nonlocal best
+            if not node:
+                return 0
+            
+            l = dfs(node.left)
+            r = dfs(node.right)
+
+            take_none = node.val
+            take_one_side = max(l, r)+node.val
+            take_both_sides = l+r+node.val
+            node_best = max(take_none, take_one_side)
+            best = max(node_best, take_both_sides, best)
+            return node_best
+
+        best = -float('inf')
+        dfs(root)
+        return best
+
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        
+        def dfs(node):
             nonlocal max_sum
 
             if not node:

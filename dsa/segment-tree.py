@@ -1,4 +1,6 @@
 class SegTree:
+    # associative range query in O(log n)
+
     def __init__(self, arr, default=0):
         """
         arr: initial array
