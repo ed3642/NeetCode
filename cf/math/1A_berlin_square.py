@@ -1,3 +1,5 @@
+# https://codeforces.com/problemset/problem/709/A
+
 #!/usr/bin/env python3
 # PowerShell:  gc input.txt | python main.py
 
@@ -10,17 +12,16 @@ def read_chars(): return list(input().strip())
 def read_int_iter(): return map(int, input().split())
 def read_all(): return sys.stdin.read().split('/n')
 
-def solve(data):
-    ...
+def solve(n, m, a):
+    x = (n+a-1)//a
+    y = (m+a-1)//a
+    
+    return x*y
 
 def main():
-    t = read_int()
+    n, m, a = read_ints()
 
-    for _ in range(t):
-        data = read_all()
-        ans = solve(data)
-        if ans is not None:
-            print(ans)
+    print(solve(n, m, a))
 
 if __name__ == "__main__":
     main()

@@ -3,7 +3,7 @@ import math
 n = 10
 LOG = int(math.log2(n)) + 2 # where n is the dataset size
 
-# LCA by binary lifting
+# LCA of a treenode by binary lifting
 def lca(u, v, parent, depth):
     # lift deeper node
     if depth[u] < depth[v]:

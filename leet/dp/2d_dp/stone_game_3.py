@@ -5,7 +5,12 @@ from typing import List
 
 class Solution:
     def stoneGameIII(self, stoneValue: List[int]) -> str:
-        # classic minimax 
+        # classic minimax, take some values and subtrack opponents optimal play
+        # this implementation is called negamax where the players turns are implicitly accounted for
+        # the maximizer is always the first player
+        # the minimizer is always the second player
+
+        # interesting note: negamax can only be implemented for 2 players. For 3+ players classic minimax with the explicit curr_player_state is needed.
 
         # max score diff respective to each player
         @cache

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # PowerShell:  gc input.txt | python main.py
 
+from collections import Counter
 import sys
 input = sys.stdin.readline
 
@@ -10,17 +11,17 @@ def read_chars(): return list(input().strip())
 def read_int_iter(): return map(int, input().split())
 def read_all(): return sys.stdin.read().split('/n')
 
-def solve(data):
-    ...
+def solve(towers):
+
+    f = Counter(towers)
+    return (max(f.values()), len(f))
 
 def main():
-    t = read_int()
+    n = read_int()
 
-    for _ in range(t):
-        data = read_all()
-        ans = solve(data)
-        if ans is not None:
-            print(ans)
+    towers = read_ints()
+
+    print(*solve(towers))
 
 if __name__ == "__main__":
     main()

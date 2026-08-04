@@ -11,16 +11,24 @@ def read_int_iter(): return map(int, input().split())
 def read_all(): return sys.stdin.read().split('/n')
 
 def solve(data):
-    ...
+    x_sum = 0
+    y_sum = 0
+    z_sum = 0
+
+    for x, y, z in data:
+        x_sum += x
+        y_sum += y
+        z_sum += z
+    
+    return 'YES' if x_sum == y_sum == z_sum == 0 else 'NO'
 
 def main():
-    t = read_int()
+    num_vec = read_int()
+    data = []
 
-    for _ in range(t):
-        data = read_all()
-        ans = solve(data)
-        if ans is not None:
-            print(ans)
+    for _ in range(num_vec):
+        data.append(read_ints())
+    print(solve(data))
 
 if __name__ == "__main__":
     main()

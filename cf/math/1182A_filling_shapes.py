@@ -10,17 +10,21 @@ def read_chars(): return list(input().strip())
 def read_int_iter(): return map(int, input().split())
 def read_all(): return sys.stdin.read().split('/n')
 
-def solve(data):
-    ...
+# [1,1,3,5]
+# [-1,0,-1,-2]
+# [5,3,1,1]
+# [-5,-2,1,2]
+
+def solve(n):
+    if n % 2 != 0:
+        return 0
+
+    return 2**(n//2)
 
 def main():
-    t = read_int()
+    n = read_int()
 
-    for _ in range(t):
-        data = read_all()
-        ans = solve(data)
-        if ans is not None:
-            print(ans)
+    print(solve(n))
 
 if __name__ == "__main__":
     main()

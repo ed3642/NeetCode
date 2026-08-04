@@ -2,7 +2,7 @@ from typing import List
 
 class FenwickTree:
     # sum fenwick tree
-    # elems must be 0 indexed
+    # elems must be 0 indexed to create, other ops are 1 indexed
     def __init__(self, elems: List[int]):
         self.n = len(elems)
         self.tree = [0] * (self.n+1)
