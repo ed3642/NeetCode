@@ -12,7 +12,7 @@ class Solution:
 
         # interesting note: negamax can only be implemented for 2 players. For 3+ players classic minimax with the explicit curr_player_state is needed.
 
-        # max score diff respective to each player
+        # max score diff respective to each player (margin)
         @cache
         def dp(i):
             if i >= N:

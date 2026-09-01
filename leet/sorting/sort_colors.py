@@ -6,10 +6,6 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        
-        # [2,0,2,1,1,0]
-        # [0,0,2,1,1,2]
-        # [0,0,1,1,2,2]
 
         placer = 0
         l = 0
